@@ -14,23 +14,24 @@ h1{
     align-items: center;
     margin: auto;
     margin-top: 10vh;
-    max-width: 50vw;
+    max-width: 60vw;
     min-height: 70vh;
     border: 1px solid grey;
+    
     
 }
 .paper {
     background: #fff;
     box-shadow:
-      0 1px 1px rgba(0,0,0,0.15),
+      0 1px 1px rgba(0,0,0,0.5),
   
       0 10px 0 -5px #eee,
       
-      0 10px 1px -4px rgba(0,0,0,0.15),
+      0 10px 1px -4px rgba(0,0,0,0.55),
      
       0 20px 0 -10px #eee,
     
-      0 20px 1px -9px rgba(0,0,0,0.15);
+      0 20px 1px -9px rgba(0,0,0,0.7);
       
  
   }
@@ -40,7 +41,7 @@ h1{
   .add-task-panel{
       justify-content: left;
       display: flex;
-      align-self: center;
+     
       height: 3vh;
      
   }
@@ -48,10 +49,11 @@ h1{
     
   }
   .text-holder{
+    min-width: 40vw;
     border: 0.5px solid ;
     border-radius: 5px;
     border-color:rgba(107,156,200,0.6) ; 
-    margin-right: 4vw;
+    margin: 0 2vw;
   
   }
   .button{
@@ -60,7 +62,17 @@ h1{
       border: none;
       background-color: rgba(107,156,200,0.6);    
   }
-  .bottom-button{
+.task{
+    display: flex;
+    align-self: flex-start;
+    padding: 3vh 0;
+}
+.task-txt{
+    min-width: 40vw;
+    border: none;
+}
+
+.bottom-button{
       position: absolute;
       bottom: 3vh;
   }

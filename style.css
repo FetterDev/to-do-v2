@@ -5,7 +5,6 @@ body{
 }
 h1{
     padding: 0;
-
 }
 .wrapper{
     position: relative;
@@ -17,23 +16,15 @@ h1{
     max-width: 60vw;
     min-height: 70vh;
     border: 1px solid grey;
-    
-    
 }
 .paper {
     background: #fff;
     box-shadow:
       0 1px 1px rgba(0,0,0,0.5),
-  
       0 10px 0 -5px #eee,
-      
       0 10px 1px -4px rgba(0,0,0,0.55),
-     
       0 20px 0 -10px #eee,
-    
       0 20px 1px -9px rgba(0,0,0,0.7);
-      
- 
   }
   .title{
       color: rgb(107,156,200);
@@ -41,12 +32,7 @@ h1{
   .add-task-panel{
       justify-content: left;
       display: flex;
-     
       height: 3vh;
-     
-  }
-  .pick-all{
-    
   }
   .text-holder{
     min-width: 40vw;
@@ -54,7 +40,6 @@ h1{
     border-radius: 5px;
     border-color:rgba(107,156,200,0.6) ; 
     margin: 0 2vw;
-  
   }
   .button{
       color: black;

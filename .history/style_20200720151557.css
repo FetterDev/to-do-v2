@@ -1,7 +1,8 @@
 body{
     padding: 0;
     margin: 0;
-    background-image: url(img/back.jpg)
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(67,167,61,1) 0%, rgba(0,212,255,1) 100%);
 }
 h1{
     padding: 0;
@@ -16,7 +17,6 @@ h1{
     margin-top: 10vh;
     max-width: 50vw;
     min-height: 70vh;
-    border: 1px solid grey;
     
 }
 .paper {
@@ -34,9 +34,6 @@ h1{
       
  
   }
-  .title{
-      color: rgb(107,156,200);
-  }
   .add-task-panel{
       justify-content: left;
       display: flex;
@@ -48,17 +45,14 @@ h1{
     
   }
   .text-holder{
-    border: 0.5px solid ;
-    border-radius: 5px;
-    border-color:rgba(107,156,200,0.6) ; 
-    margin-right: 4vw;
-  
+      border: 0.5px solid  linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(67,167,61,1) 0%, rgba(0,212,255,1) 100%);
+     margin-right: 4vw;
+     
   }
   .button{
-      color: black;
       border-radius: 5px;
       border: none;
-      background-color: rgba(107,156,200,0.6);    
+      background-color: rgba(42,205,86,1)    
   }
   .bottom-button{
       position: absolute;

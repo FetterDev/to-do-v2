@@ -34,9 +34,6 @@ h1{
       
  
   }
-  .title{
-      color: rgb(107,156,200);
-  }
   .add-task-panel{
       justify-content: left;
       display: flex;
@@ -55,7 +52,6 @@ h1{
   
   }
   .button{
-      color: black;
       border-radius: 5px;
       border: none;
       background-color: rgba(107,156,200,0.6);    

@@ -34,9 +34,6 @@ h1{
       
  
   }
-  .title{
-      color: rgb(107,156,200);
-  }
   .add-task-panel{
       justify-content: left;
       display: flex;
@@ -50,15 +47,14 @@ h1{
   .text-holder{
     border: 0.5px solid ;
     border-radius: 5px;
-    border-color:rgba(107,156,200,0.6) ; 
+    border-color:rgba(42,205,86,0.9) ; 
     margin-right: 4vw;
   
   }
   .button{
-      color: black;
       border-radius: 5px;
       border: none;
-      background-color: rgba(107,156,200,0.6);    
+      background-color: rgba(42,205,86,1);    
   }
   .bottom-button{
       position: absolute;

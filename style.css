@@ -81,4 +81,7 @@ h1{
       position: absolute;
       bottom: 3vh;
   }
+.listdecorate{
+    list-style: none;
+}
   

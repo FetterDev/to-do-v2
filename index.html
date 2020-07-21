@@ -5,31 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>to do list</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"> </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div>
         <div class=" wrapper paper">
-                <div style="padding: 0 5vw;">
-                    <h1 class="title"> Your to do list</h1>
-               <div class="add-task-panel">
-                   <input type="text" class="text-holder" placeholder="Add new task!">
-                   <input type="button" class="button" value="Add task">
-               </div>
-               <div class="task">
-                   <input type="checkbox" class="task-check" >
-                   <input type="text" class="task-txt">
-                   <img src="img/delDO.png" alt="" class="task-delete">
-               </div>
-               
-                <div class="bottom-button">
-                    <input type="button" class="button" value="Pick all">
-                    <input type="button" class="button" value="All tasks">
-                    <input type="button" class="button" value="Active tasks">
-                    <input type="button" class="button"value="Completed task">
-                    
+                <div >
+                     <h1 class="title"> Your to do list</h1>
+                     <!--
+                         <img src="" alt="">
+                         <p>curent tasks</p>
+                        good place for count task holder
+                     -->
+                        <div class="add-task-panel">
+                            <input type="text" class="text-holder" placeholder="Add new task!" id="new-task-text">
+                            <input type="button" class="button" value="Add task">
+                        </div>
+                        <div class="task done-task-decorate">
+                            <input type="checkbox" class="task-check" >
+                            <input type="text" class="task-txt">
+                            <img src="img/delDO.png" alt="" class="task-delete">
+                        </div>
+                        <div class="bottom-button">
+                            <input type="button" class="button" value="Pick all">
+                            <input type="button" class="button" value="All tasks">
+                            <input type="button" class="button" value="Active tasks">
+                            <input type="button" class="button"value="Completed task">
+                        </div>
                 </div>
-                </div>
-               
            </div>
         </div>
     </div>

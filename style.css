@@ -74,6 +74,9 @@ ol{
 .task-delete{
     background-image: url(img/delDO.png);
     opacity: 0;
+    margin-left: 30vh;
+    height: 2vh;
+    
 }
 .task-delete:hover{
     opacity: 1;
@@ -92,4 +95,5 @@ ol{
     list-style: none;
     
 }
+
   

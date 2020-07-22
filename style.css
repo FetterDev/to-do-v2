@@ -6,6 +6,9 @@ body{
 h1{
     padding: 0;
 }
+ol{
+    padding: 0;
+}
 .wrapper{
     position: relative;
     display: flex;
@@ -54,8 +57,8 @@ h1{
       border: none;
       background-color: rgba(107,156,200,0.6);    
   }
-.task{
-    display: flex;
+.task-check{
+ 
     align-self: flex-start;
     padding: 3vh 0;
     margin: 0 1.82vw;
@@ -64,8 +67,12 @@ h1{
     min-width: 37.35vw;
     border: none;
     margin-right: 6.5vw;
+    display: flex;
+    align-self: flex-start;
+    margin: 0 1.82vw;
 }
 .task-delete{
+    background-image: url(img/delDO.png);
     opacity: 0;
 }
 .task-delete:hover{
@@ -81,7 +88,8 @@ h1{
       position: absolute;
       bottom: 3vh;
   }
-.listdecorate{
+.list-decorate{
     list-style: none;
+    
 }
   

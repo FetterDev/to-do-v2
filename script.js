@@ -3,14 +3,16 @@ jQuery(document).ready(function () {
 
             $(document).on('click', '#add-task-button', function () {
             let tabKiller = $("#new-task-text").val();
-            let trimText = tabKiller.trim()
-            $("#new-task-text").val = trimText;
-        
-            if ($("#new-task-text").val().length != 0) {
+            let taskText = tabKiller.trim()
+            $("#new-task-text").val = taskText;
+            if (taskText.length != 0) {
                 let idTemp = Date.now();
-                let tempTaskCreateValue = " <li class=list-decorate> <input type=checkbox class=task-check id='taskDoneChecker'><span class=task >" + $("#new-task-text").val() + "</span><img class=task-delete src='img/delete.gif'></img> </li>"
+                let tempTaskCreateValue = " <li class=list-decorate> <input type=checkbox class=task-check id='taskDoneChecker'><span class=task >" + taskText + "</span><img class=task-delete src='img/delete.gif'></img> </li>"
                 $("#to-do-list").append(tempTaskCreateValue);
             
+                $("#new-task-text").val("");
+            }
+            else{
                 $("#new-task-text").val("");
             }
             $(document).on('click', '.task-check' , function () {
@@ -28,7 +30,7 @@ jQuery(document).ready(function () {
               
             });
 
-        });
+            });
 
     
 

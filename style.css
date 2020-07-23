@@ -67,18 +67,17 @@ ol{
     min-width: 37.35vw;
     border: none;
     margin-right: 6.5vw;
-    display: flex;
     align-self: flex-start;
     margin: 0 1.82vw;
 }
-.task-delete{
-    background-image: url(img/delDO.png);
+.task-delete-button{
+    background-color:red;
+   
     opacity: 0;
     margin-left: 30vh;
-    height: 2vh;
     
 }
-.task-delete:hover{
+.task-delete-button:hover{
     opacity: 1;
     border:0.1px solid red;
     border-radius: 4px;

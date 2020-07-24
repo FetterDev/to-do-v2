@@ -74,12 +74,23 @@ ol{
     background-color:red;
    
     opacity: 0;
-    margin-left: 30vh;
+    margin-left: 3wv;
     
 }
 .task-delete-button:hover{
     opacity: 1;
     border:0.1px solid red;
+    border-radius: 4px;
+}
+.task-edit-button{
+    background-color:green;
+    opacity: 0;
+    margin-left: 3wv;
+    
+}
+.task-edit-button:hover{
+    opacity: 1;
+    border:0.1px solid green;
     border-radius: 4px;
 }
 .done-task-decoration{

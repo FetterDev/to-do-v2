@@ -73,6 +73,8 @@ jQuery(document).ready(function () {
                 $(this).siblings('.task-txt').removeClass("done-task-decoration");
             }
     })
-
+    $(document).on('click', '#delete-all-complited-button', function () {
+       
+    })
     
 });

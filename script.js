@@ -12,6 +12,7 @@ jQuery(document).ready(function () {
             taskObject.status = false;
             taskListHolder.push(taskObject);
             $("#new-task-text").val("");
+            $("#to-do-list").children().remove();
             render();
             }
         else {
@@ -23,11 +24,17 @@ jQuery(document).ready(function () {
 
     function render(){
         if (taskListHolder.length>0){
-            tempHolderArrayElm=taskListHolder[taskListHolder.length-1];
-            let tempHolderText= tempHolderArrayElm.text;
-            let tempHolderId=tempHolderArrayElm.id;
-            $("#to-do-list").append(`<li class=list-decorate id=${tempHolderId}><input type=checkbox  class=task-check ><span class=task-txt> ${tempHolderText} 
-            </span> <input type=button class=task-delete-button value= Delete id=id=${tempHolderId}> <input type=button class=task-edit-button value= Edit id=taskEditButton><br/> </li>`);
+            $.each(taskListHolder,function(index,value){
+                tempHolderArrayElm=value;
+                let tempHolderText= tempHolderArrayElm.text;
+                let tempHolderId=tempHolderArrayElm.id;
+                let tempHolderStatus =tempHolderArrayElm.status;
+                console.log(tempHolderStatus)
+                $("#to-do-list").append(`<li class=list-decorate id=${tempHolderId}><input type=checkbox  class=task-check value="${tempHolderStatus}">
+                <span class=task-txt> ${tempHolderText} 
+                </span> <input type=button class=task-delete-button value= Delete id=${tempHolderId}>
+                <input type=button class=task-edit-button value= Edit id=taskEditButton><br/> </li>`);
+            });
         }
         else{
 
@@ -43,14 +50,13 @@ jQuery(document).ready(function () {
         console.log("taskListHolder", taskListHolder);
         let deleteTaskIdHolder = parseInt(tempTaskIdHolder.replace(/[^\d]/g, ''));
         console.log('deleteTaskIdHolder',deleteTaskIdHolder);
-        //let temp= $.inArray(taskListHolder,deleteTaskIdHolder);
         let deleteTaskArrayIndexHolder = taskListHolder.findIndex(item => item.id == deleteTaskIdHolder);
         console.log('deleteTaskIndexHolder',typeof(deleteTaskIdHolder));
-       // delete taskListHolder[deleteTaskArrayIndexHolder];
         taskListHolder.splice(deleteTaskArrayIndexHolder,1);
         $(this).parent().remove();
         console.log("taskListHolder", taskListHolder);
-
+        $("#to-do-list").children().remove();
+        render()
     });
  
     $("#body-id").keydown(function (event) {
@@ -66,7 +72,7 @@ jQuery(document).ready(function () {
             if ($(this).is(':checked')) {
 
                 $(this).siblings('.task-txt').addClass("done-task-decoration");
-                console.log(  $(this).siblings)
+                
             }
             else {
 

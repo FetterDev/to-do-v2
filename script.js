@@ -40,7 +40,9 @@ jQuery(document).ready(function () {
 
         }
      };
-    
+     $(document).on("click","#pick-all-button",function(){
+        $(".task-check").trigger('click');
+});
 
     $(document).on("click","#pick-all-button",function(){
             $(".task-check").trigger('click');

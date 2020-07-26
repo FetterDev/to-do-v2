@@ -40,12 +40,14 @@ jQuery(document).ready(function () {
                 <input type=button class=task-edit-button value=Edit id=taskEditButton><br/> </li>`);
                 
                 if(tempHolderStatus){
-                    $('#tempHolderId').addClass("done-task-decoration");
+                    console.log(typeof(tempHolderId))
+                    $(`#${tempHolderId} .task-txt`).addClass("done-task-decoration");
                     console.log("1111")
                 }else{
-                    $('#tempHolderId').removeClass("done-task-decoration");
-                    console.log("0000")
+                    $(`#${tempHolderId} .task-txt`).removeClass("done-task-decoration");
+                  
                 }
+                
             });
         }
      };

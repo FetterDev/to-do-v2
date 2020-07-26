@@ -29,24 +29,23 @@ jQuery(document).ready(function () {
                 let tempHolderText= tempHolderArrayElm.text;
                 let tempHolderId=tempHolderArrayElm.id;
                 let tempHolderStatus =tempHolderArrayElm.status;
-                //tempHolderStatus хочу передать в checked (checked=${tempHolderStatus} не работает)
+                let checked = '';
                 console.log(tempHolderStatus)
-                //костыль
                 if(tempHolderStatus){
-                    $("#to-do-list").append(`<li class=list-decorate id=${tempHolderId}><input type=checkbox id=${tempHolderId}  class=task-check checked>
-                    <span id=${tempHolderId} class=task-txt>${tempHolderText}</span> <input type=button class=task-delete-button value=Delete id=${tempHolderId}>
-                    <input type=button class=task-edit-button value=Edit id=taskEditButton><br/> </li>`);
-                    $('#tempHolderId').addClass("done-task-decoration");
-                    
-                }else{
-                    $("#to-do-list").append(`<li class=list-decorate id=${tempHolderId}><input type=checkbox id=${tempHolderId}  class=task-check unchecked>
-                    <span id=${tempHolderId} class=task-txt> ${tempHolderText} 
-                    </span> <input type=button class=task-delete-button value=Delete id=${tempHolderId}>
-                    <input type=button class=task-edit-button value=Edit id=taskEditButton><br/> </li>`);
-                    $('#tempHolderId').removeClass("done-task-decoration");
+                    checked = 'checked';
                 }
-            
-         
+                
+                $("#to-do-list").append(`<li class=list-decorate id=${tempHolderId}><input type=checkbox id=${tempHolderId} ${checked} class=task-check >
+                <span id=${tempHolderId} class=task-txt>${tempHolderText}</span> <input type=button class=task-delete-button value=Delete id=${tempHolderId}>
+                <input type=button class=task-edit-button value=Edit id=taskEditButton><br/> </li>`);
+                
+                if(tempHolderStatus){
+                    $('#tempHolderId').addClass("done-task-decoration");
+                    console.log("1111")
+                }else{
+                    $('#tempHolderId').removeClass("done-task-decoration");
+                    console.log("0000")
+                }
             });
         }
      };

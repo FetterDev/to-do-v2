@@ -9,6 +9,14 @@ h1{
 ol{
     padding: 0;
 }
+.headList{
+    display: flex;
+    justify-content: space-between;
+}
+.countTaskHolder{
+    padding-top: 2vh;
+    font-size: 1.6vh;
+}
 .wrapper{
     position: relative;
     display: flex;

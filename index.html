@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>to do list</title>
+    <title>TO DO by Fetter</title>
+    <link rel="shortcut icon" href="/img/editDO.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>ы
     <script src="script.js"> </script>
     
-</head>
+</head>а
 <body id="body-id">
     <div>
         <div class=" wrapper paper">
-                <div >
-                     <h1 class="title"> Your to do list</h1>
-                  
+                <div >  
+                    <div class="headList">
+                        <h1 class="title" id="activeTaskCounter"> Your to do list</h1>
+                        <div class="countTaskHolder" > <span id="taskCounter" ></span></div>
+                     </div>
+                    
                         <div class="add-task-panel">
                             <input type="text" class="text-holder" placeholder="Add new task!" id="new-task-text">
                             <input type="button" class="button" value="Add task" id="add-task-button">

@@ -29,34 +29,38 @@ jQuery(document).ready(function () {
                 let tempHolderText= tempHolderArrayElm.text;
                 let tempHolderId=tempHolderArrayElm.id;
                 let tempHolderStatus =tempHolderArrayElm.status;
+                //tempHolderStatus хочу передать в checked (checked=${tempHolderStatus} не работает)
                 console.log(tempHolderStatus)
-                $("#to-do-list").append(`<li class=list-decorate id=${tempHolderId}><input type=checkbox  class=task-check value="${tempHolderStatus}">
-                <span class=task-txt> ${tempHolderText} 
-                </span> <input type=button class=task-delete-button value= Delete id=${tempHolderId}>
-                <input type=button class=task-edit-button value= Edit id=taskEditButton><br/> </li>`);
+                //костыль
+                if(tempHolderStatus){
+                    $("#to-do-list").append(`<li class=list-decorate id=${tempHolderId}><input type=checkbox id=${tempHolderId}  class=task-check checked>
+                    <span id=${tempHolderId} class=task-txt>${tempHolderText}</span> <input type=button class=task-delete-button value=Delete id=${tempHolderId}>
+                    <input type=button class=task-edit-button value=Edit id=taskEditButton><br/> </li>`);
+                    $('#tempHolderId').addClass("done-task-decoration");
+                    
+                }else{
+                    $("#to-do-list").append(`<li class=list-decorate id=${tempHolderId}><input type=checkbox id=${tempHolderId}  class=task-check unchecked>
+                    <span id=${tempHolderId} class=task-txt> ${tempHolderText} 
+                    </span> <input type=button class=task-delete-button value=Delete id=${tempHolderId}>
+                    <input type=button class=task-edit-button value=Edit id=taskEditButton><br/> </li>`);
+                    $('#tempHolderId').removeClass("done-task-decoration");
+                }
+            
+         
             });
         }
-        else{
-
-        }
      };
-     $(document).on("click","#pick-all-button",function(){
-        $(".task-check").trigger('click');
-});
+ 
 
     $(document).on("click","#pick-all-button",function(){
             $(".task-check").trigger('click');
     });
         $(document).on("click",".task-delete-button",function(){
         let tempTaskIdHolder= (this).id;
-        console.log("taskListHolder", taskListHolder);
         let deleteTaskIdHolder = parseInt(tempTaskIdHolder.replace(/[^\d]/g, ''));
-        console.log('deleteTaskIdHolder',deleteTaskIdHolder);
         let deleteTaskArrayIndexHolder = taskListHolder.findIndex(item => item.id == deleteTaskIdHolder);
-        console.log('deleteTaskIndexHolder',typeof(deleteTaskIdHolder));
         taskListHolder.splice(deleteTaskArrayIndexHolder,1);
         $(this).parent().remove();
-        console.log("taskListHolder", taskListHolder);
         $("#to-do-list").children().remove();
         render()
     });
@@ -72,13 +76,26 @@ jQuery(document).ready(function () {
 
     $(document).on('click', '.task-check', function () {
             if ($(this).is(':checked')) {
-
                 $(this).siblings('.task-txt').addClass("done-task-decoration");
+                let tempCheckboxIdHolder=(this).id;
+                let checkTaskIdHolder = parseInt(tempCheckboxIdHolder.replace(/[^\d]/g, ''));
+                let taskArrayIndexHolder = taskListHolder.findIndex(item => item.id == checkTaskIdHolder);
+                let tempArrayElement=taskListHolder[taskArrayIndexHolder];
+              
+                tempArrayElement.status=true;
+                taskListHolder[taskArrayIndexHolder]=tempArrayElement;
                 
+                console.log("taskListHolder",taskListHolder)
             }
             else {
 
                 $(this).siblings('.task-txt').removeClass("done-task-decoration");
+                let tempCheckboxIdHolder=(this).id;
+                let checkTaskIdHolder = parseInt(tempCheckboxIdHolder.replace(/[^\d]/g, ''));
+                let taskArrayIndexHolder = taskListHolder.findIndex(item => item.id == checkTaskIdHolder);
+                let tempArrayElement=taskListHolder[taskArrayIndexHolder];
+                tempArrayElement.status=false;
+                taskListHolder[taskArrayIndexHolder]=tempArrayElement;
             }
     })
     $(document).on('click', '#delete-all-complited-button', function () {

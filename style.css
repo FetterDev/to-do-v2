@@ -15,7 +15,9 @@ ol{
 }
 .countTaskHolder{
     padding-top: 2vh;
-    font-size: 1.6vh;
+    font-size: 2vh;
+    color:rgb(236, 128, 158) ;/*цвет великолепного утра*/
+   
 }
 .wrapper{
     position: relative;
@@ -31,7 +33,7 @@ ol{
 @media(max-device-width: 600px ){
 .wrapper{
     margin-top: 5vh;
-    max-width: 85vw;
+    max-width: 95vw;
     min-height: 90vh;
 }
 }
@@ -72,6 +74,7 @@ ol{
     margin: 0 1.82vw;
 }
 .task-txt{
+    max-width: 60vw;
     min-width: 37.35vw;
     border: none;
     margin-right: 6.5vw;
@@ -79,26 +82,25 @@ ol{
     margin: 0 1.82vw;
 }
 .task-delete-button{
-    background-color:red;
-   
-    opacity: 0;
-    margin-left: 3wv;
+    border: none;
+
+    background-color: rgba(107,156,200,0.6);
     
 }
 .task-delete-button:hover{
     opacity: 1;
-    border:0.1px solid red;
+    border:0.1px solid  rgba(107,156,200,0.6);
     border-radius: 4px;
 }
 .task-edit-button{
-    background-color:green;
-    opacity: 0;
-    margin-left: 3wv;
+    background-color:  rgba(107,156,200,0.6);
+    border: none;
+   
     
 }
 .task-edit-button:hover{
     opacity: 1;
-    border:0.1px solid green;
+    border:3px solid rgba(107,156,200,0.6);
     border-radius: 4px;
 }
 .done-task-decoration{
@@ -110,8 +112,8 @@ ol{
       bottom: 3vh;
   }
 .list-decorate{
+    padding: 0.5vh 0;
     list-style: none;
-    
 }
 
   

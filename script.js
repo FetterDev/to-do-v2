@@ -64,7 +64,7 @@ jQuery(document).ready(function () {
             });
         }
         activeTaskHolder();
-        console.log(taskListHolder)
+       
     };
 
 
@@ -86,7 +86,7 @@ jQuery(document).ready(function () {
 
     $("#body-id").keydown(function (event) {
         if (event.keyCode == 13) {
-           
+            $(".task-edit-button").click();
             $("#add-task-button").click();
         } 
     });
@@ -116,16 +116,30 @@ jQuery(document).ready(function () {
             activeTaskHolder();
         }
     })
-    $(document).on('click', '#delete-all-complite-button', function () {
 
+    $(document).on('click', '#delete-all-compliteTask-button', function () {
+            let tempActiveTaskHolder = $(":checkbox:checked");
+            
+                $.each(tempActiveTaskHolder,function(index,value){
+                    let tempObjectArrayHolder=$(value).parent()
+                    let tempTaskStringIdHolder=tempObjectArrayHolder.attr("id");
+                    let tempTaskIdHolder = parseInt(tempTaskStringIdHolder);
+                    let taskArrayDeleteCompleteTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempTaskIdHolder );
+                    taskListHolder.splice(taskArrayDeleteCompleteTaskIndexHolder,1);
+                    console.log(taskListHolder);
+                });
+
+            $(this).parent().remove();
+            $("#to-do-list").children().remove();
+            render();
     });
+
     $(document).on('click', '.task-edit-button ', function () {
         let tempParentTaskId = $(this).parent();
         let tempStringEditedTaskId=tempParentTaskId.attr("id")
         let tempEditedTaskId = parseInt(tempStringEditedTaskId);
         let newTaskElm= $(`#${tempEditedTaskId}`).children();
         let newTaskTextValue = newTaskElm.text();
-        console.log(newTaskTextValue)
         //let newTaskTextValue =  $(`#${tempEditedTaskId}.task-txt`).val();
         let taskArrayEditTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempEditedTaskId);
         let tempArrayEditTaskElement = taskListHolder[taskArrayEditTaskIndexHolder];

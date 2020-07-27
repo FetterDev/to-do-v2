@@ -26,9 +26,12 @@ jQuery(document).ready(function () {
         $("#taskCounter >").remove();
         let tempActiveTaskHolder = $(":checkbox:checked").length;
         let activeTaskHolder = taskListHolder.length - tempActiveTaskHolder;
-        let taskCounterText = "task"
-        if (activeTaskHolder > 1) taskCounterText = "tasks"
-        $("#taskCounter").append(` <span> Need do ${activeTaskHolder} ${taskCounterText}</span> `);
+        let taskCounterText = "task";
+        if(activeTaskHolder>0){
+
+            if (activeTaskHolder > 1) taskCounterText = "tasks"
+            $("#taskCounter").append(` <span> Need do ${activeTaskHolder} ${taskCounterText}</span> `);
+        }
 
     }
 
@@ -117,21 +120,26 @@ jQuery(document).ready(function () {
         }
     })
 
-    $(document).on('click', '#delete-all-compliteTask-button', function () {
+    $(document).on('click', '#delete-all-completeTask-button', function () {
             let tempActiveTaskHolder = $(":checkbox:checked");
-            
-                $.each(tempActiveTaskHolder,function(index,value){
-                    let tempObjectArrayHolder=$(value).parent()
-                    let tempTaskStringIdHolder=tempObjectArrayHolder.attr("id");
-                    let tempTaskIdHolder = parseInt(tempTaskStringIdHolder);
-                    let taskArrayDeleteCompleteTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempTaskIdHolder );
-                    taskListHolder.splice(taskArrayDeleteCompleteTaskIndexHolder,1);
-                    console.log(taskListHolder);
-                });
-
-            $(this).parent().remove();
-            $("#to-do-list").children().remove();
-            render();
+                 if(tempActiveTaskHolder.length>0){
+                    $.each(tempActiveTaskHolder,function(index,value){
+                        let tempObjectArrayHolder=$(value).parent()
+                        let tempTaskStringIdHolder=tempObjectArrayHolder.attr("id");
+                        let tempTaskIdHolder = parseInt(tempTaskStringIdHolder);
+                        let taskArrayDeleteCompleteTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempTaskIdHolder );
+                        taskListHolder.splice(taskArrayDeleteCompleteTaskIndexHolder,1);
+                        console.log(taskListHolder);
+                    });
+     
+                    $("#to-do-list").children().remove();
+                    render();
+                 }else{
+                    $("#to-do-list").children().remove();
+                    $(`#to-do-list`).append(`<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>`)
+                 }
+               
+          
     });
 
     $(document).on('click', '.task-edit-button ', function () {
@@ -145,9 +153,61 @@ jQuery(document).ready(function () {
         let tempArrayEditTaskElement = taskListHolder[taskArrayEditTaskIndexHolder];
         tempArrayEditTaskElement.text= newTaskTextValue;
         taskListHolder[taskArrayEditTaskIndexHolder] = tempArrayEditTaskElement;
-        $(this).parent().remove();
-        $("#to-do-list").children().remove();
-        render()
+        console.log(taskListHolder);
+    });
+    
+    $(document).on('click', '#show-all-tasks',function(){
+        let tempTaskHolder = $(":checkbox");
+        if(tempTaskHolder.length>0){
+            $("#to-do-list").children().remove();    
+            render();
+        }else{
+            $("#to-do-list").children().remove();
+            $(`#to-do-list`).append(`<span class=all-task-done-alert> Hurry to add new tasks to your to-do list! </span>`)
+        }
+    });
+
+    $(document).on('click', '#show-actual-tasks',function(){
+        $("#to-do-list").children().remove();  
+        render();
+        let tempDoneTaskHolder = $(":checkbox:checked");
+        let tempCounterDoneTaskHolder= taskListHolder.length - tempDoneTaskHolder.length;
+
+            if(tempCounterDoneTaskHolder>0){
+                $.each(tempDoneTaskHolder,function(index,value){
+                $(this).parent().remove();
+            })     
+            } else{
+                $("#to-do-list").children().remove();
+                $(`#to-do-list`).append(`<span class=all-task-done-alert> Yooo dude, all task is done. Your realy awecome! </span>`)
+            }
+      
+    });
+
+    $(document).on('click', '#show-complete-tasks',function(){
+        $("#to-do-list").children().remove(); 
+        render();
+        let tempDoneTaskHolder = $(":checkbox:checked");
+        if(tempDoneTaskHolder.length>0){
+
+            let tempDoneTaskHolder = $(":checkbox");
+            $.each(tempDoneTaskHolder,function(index,value){
+                    let tempDoneTaskStringIdHolder = $(this).parent().attr("id");
+                    let tempDoneTaskIdHolder = parseInt(tempDoneTaskStringIdHolder);
+                    let tempDoneTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempDoneTaskIdHolder);
+                    let tempArrayElement = taskListHolder[tempDoneTaskIndexHolder];
+                    if(tempArrayElement.status===false){
+                        
+                         $(`#${tempDoneTaskIdHolder}`).children().remove();
+                    }
+                    
+            });
+        }else{
+            $("#to-do-list").children().remove();
+            $(`#to-do-list`).append(`<span class=all-task-done-alert> Bro you haven't done noone task :( </span>`)
+        }
+          
+            
     });
 
     

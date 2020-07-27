@@ -1,3 +1,4 @@
+
 body{
     padding: 0;
     margin: 0;
@@ -29,6 +30,7 @@ ol{
     max-width: 60vw;
     min-height: 70vh;
     border: 1px solid grey;
+    padding-bottom: 5vh;
 }
 @media(max-device-width: 600px ){
 .wrapper{
@@ -115,5 +117,9 @@ ol{
     padding: 0.5vh 0;
     list-style: none;
 }
+.all-task-done-alert{
+    
+    color: rgb(236, 128, 158);
+    font-size: 2vh;
+}
 
-  

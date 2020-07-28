@@ -24,13 +24,22 @@
                             <input type="text" class="text-holder" placeholder="Add new task!" id="new-task-text">
                             <input type="button" class="button" value="Add task" id="add-task-button">
                         </div>
-                       
+                        <div class="pick-all-button">
+                            <div>
+                                <a type="checkbox"  id="pick-all-button"> <img src="img/checkbox.png" alt=""> </a>   
+                                <span>Tap this for pick all tasks</span>
+                            </div>
+                            <div>
+                                <span>Tap this for delete  all  compete tasks </span>
+                                <a id="delete-all-completeTask-button" ><img src="img/trash.png" alt=""></a> 
+                            </div>
+                        </div>   
                         <ol id="to-do-list">
 
                         </ol>
                             <div class="bottom-button ">
-                                <input type="button" class="button" value="Pick all" id="pick-all-button">
-                                <input type="button" class="button" value="Delete completed tasks" id="delete-all-completeTask-button">
+                              
+                                
                                 <input type="button" class="button" value="All tasks" id="show-all-tasks">
                                 <input type="button" class="button" value="Active tasks" id="show-actual-tasks">
                                 <input type="button" class="button" value="Completed task" id="show-complete-tasks">

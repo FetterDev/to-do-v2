@@ -28,11 +28,13 @@ jQuery(document).ready(function () {
         let activeTaskHolder = taskListHolder.length - tempActiveTaskHolder;
         let taskCounterText = "task";
         if(activeTaskHolder>0){
-
+            $(".pick-all-button").attr('style', 'opacity: 1;');
             if (activeTaskHolder > 1) taskCounterText = "tasks"
             $("#taskCounter").append(` <span> Need do ${activeTaskHolder} ${taskCounterText}</span> `);
+        }else{
+           // $(".pick-all-button").attr('style', 'opacity: 1;'); maybe done it lately
         }
-
+    
     }
 
     function render() {
@@ -50,10 +52,10 @@ jQuery(document).ready(function () {
 
                 $("#to-do-list").append(
                     `<li class=list-decorate id=${tempHolderId}>
-                        <input type=checkbox  ${checked} class=task-check >
-                        <span  class=task-txt  contenteditable=true word-break=break-all id=spanId>${tempHolderText} </span>
+                        <input id=task-checkbox type=checkbox  ${checked} class=task-check >
+                        <span  class=task-txt white-space:pre-line word-break=break-all id=spanId>${tempHolderText} </span>
                         <input type=button class=task-delete-button value=Delete >
-                        <input type=button  class=task-edit-button value=Edit ><br/>
+                        <br/>
                     </li>`
                 );
 
@@ -70,11 +72,25 @@ jQuery(document).ready(function () {
        
     };
 
-
+/*
     $(document).on("click", "#pick-all-button", function () {
-        $(".task-check").trigger('click');
-        activeTaskHolder();
+        let doneTasksCheckox = $(":checkbox:checked");
+        let tempDoneTaskHolde = $(".task-check");
+        console.log(tempDoneTaskHolder)
+        $.each(tempDoneTaskHolder,function(index,value){
+                let tempDoneTaskStringIdHolder = $(this).parent().attr("id");
+                let tempDoneTaskIndexHolder=GetIndexElem(tempDoneTaskStringIdHolder);
+                let tempArrayElement = taskListHolder[tempDoneTaskIndexHolder];
+                tempDoneTaskIdHolder = tempArrayElement.id;
+                if(tempArrayElement.status===false){
+                    
+                     $(`#${tempDoneTaskIdHolder}`).children().remove();
+                }
+            
+        activeTaskHolder();//
+        
     });
+    */
     $(document).on("click", ".task-delete-button", function () {
         let tempElmTaskIdHolder = $(this).parent();
         tempTaskIdHolder = tempElmTaskIdHolder.attr("id");
@@ -93,8 +109,24 @@ jQuery(document).ready(function () {
             $("#add-task-button").click();
         } 
     });
-
-
+    $(document).on("dblclick",".task-txt", function(){
+            console.log(this)
+            let tempSpanParentStringIdHolder= $(this).parent().attr("id");
+            let indexSpanParent = GetIndexElem(tempSpanParentStringIdHolder);
+            $(this).replaceWith(`<input id=temp-txt-editor  value="${this.innerText}" type=text> </input>`)
+            
+            $("#body-id").keydown(function (event) {
+                if (event.keyCode == 13 ) {
+                   
+                    let tempInputValueHolder= $("#temp-txt-editor").val()
+                    taskListHolder[indexSpanParent].text = tempInputValueHolder;
+                    $("#to-do-list").children().remove(); 
+                    render();
+                } 
+            });
+    });
+    
+//переделать то что ниже до codereview
     $(document).on('click', '.task-check', function () {
         if ($(this).is(':checked')) {
             $(this).siblings('.task-txt').addClass("done-task-decoration");
@@ -119,52 +151,43 @@ jQuery(document).ready(function () {
             activeTaskHolder();
         }
     })
-
+//
     $(document).on('click', '#delete-all-completeTask-button', function () {
-            let tempActiveTaskHolder = $(":checkbox:checked");
-                 if(tempActiveTaskHolder.length>0){
-                    $.each(tempActiveTaskHolder,function(index,value){
-                        let tempObjectArrayHolder=$(value).parent()
-                        let tempTaskStringIdHolder=tempObjectArrayHolder.attr("id");
-                        let tempTaskIdHolder = parseInt(tempTaskStringIdHolder);
-                        let taskArrayDeleteCompleteTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempTaskIdHolder );
-                        taskListHolder.splice(taskArrayDeleteCompleteTaskIndexHolder,1);
-                        console.log(taskListHolder);
-                    });
+        let tempActiveTaskHolder = $(":checkbox:checked");
+            if(tempActiveTaskHolder.length>0){
+                $.each(tempActiveTaskHolder,function(index,value){
+                    let tempObjectArrayHolder=$(value).parent()
+                    let tempTaskStringIdHolder=tempObjectArrayHolder.attr("id");
+                    let tempTaskIdHolder = parseInt(tempTaskStringIdHolder);
+                    let taskArrayDeleteCompleteTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempTaskIdHolder );
+                    taskListHolder.splice(taskArrayDeleteCompleteTaskIndexHolder,1);
+                });
      
-                    $("#to-do-list").children().remove();
-                    render();
-                 }else{
-                    $("#to-do-list").children().remove();
-                    $(`#to-do-list`).append(`<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>`)
-                 }
+                $("#to-do-list").children().remove();
+                render();
+                $('#show-all-tasks').trigger('click');
+            }else{
+                $("#to-do-list").children().remove();
+                $(`#to-do-list`).append(`<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>`)
+             }
                
-          
-    });
-
-    $(document).on('click', '.task-edit-button ', function () {
-        let tempParentTaskId = $(this).parent();
-        let tempStringEditedTaskId=tempParentTaskId.attr("id")
-        let tempEditedTaskId = parseInt(tempStringEditedTaskId);
-        let newTaskElm= $(`#${tempEditedTaskId}`).children();
-        let newTaskTextValue = newTaskElm.text();
-        //let newTaskTextValue =  $(`#${tempEditedTaskId}.task-txt`).val();
-        let taskArrayEditTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempEditedTaskId);
-        let tempArrayEditTaskElement = taskListHolder[taskArrayEditTaskIndexHolder];
-        tempArrayEditTaskElement.text= newTaskTextValue;
-        taskListHolder[taskArrayEditTaskIndexHolder] = tempArrayEditTaskElement;
-        console.log(taskListHolder);
+        
     });
     
     $(document).on('click', '#show-all-tasks',function(){
+        $("#to-do-list").children().remove();    
+        render();
         let tempTaskHolder = $(":checkbox");
-        if(tempTaskHolder.length>0){
+        if(tempTaskHolder.length>1){
             $("#to-do-list").children().remove();    
             render();
+            console.log("tempTaskHolder")
         }else{
             $("#to-do-list").children().remove();
             $(`#to-do-list`).append(`<span class=all-task-done-alert> Hurry to add new tasks to your to-do list! </span>`)
+            console.log(tempTaskHolder)
         }
+        
     });
 
     $(document).on('click', '#show-actual-tasks',function(){
@@ -190,18 +213,20 @@ jQuery(document).ready(function () {
         let tempDoneTaskHolder = $(":checkbox:checked");
         if(tempDoneTaskHolder.length>0){
 
-            let tempDoneTaskHolder = $(":checkbox");
+            let tempDoneTaskHolder = $(".task-check");
+            console.log(tempDoneTaskHolder)
             $.each(tempDoneTaskHolder,function(index,value){
                     let tempDoneTaskStringIdHolder = $(this).parent().attr("id");
-                    let tempDoneTaskIdHolder = parseInt(tempDoneTaskStringIdHolder);
-                    let tempDoneTaskIndexHolder = taskListHolder.findIndex(item => item.id == tempDoneTaskIdHolder);
+                    let tempDoneTaskIndexHolder=GetIndexElem(tempDoneTaskStringIdHolder);
                     let tempArrayElement = taskListHolder[tempDoneTaskIndexHolder];
+                    tempDoneTaskIdHolder = tempArrayElement.id;
                     if(tempArrayElement.status===false){
                         
                          $(`#${tempDoneTaskIdHolder}`).children().remove();
                     }
-                    
+                
             });
+
         }else{
             $("#to-do-list").children().remove();
             $(`#to-do-list`).append(`<span class=all-task-done-alert> Bro you haven't done noone task :( </span>`)
@@ -210,5 +235,10 @@ jQuery(document).ready(function () {
             
     });
 
-    
+    function GetIndexElem(stringId){
+        let TaskId = parseInt(stringId);
+        let TaskIndex = taskListHolder.findIndex(item => item.id == TaskId);
+        return TaskIndex ;
+    };
+
 });

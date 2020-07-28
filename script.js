@@ -72,25 +72,25 @@ jQuery(document).ready(function () {
        
     };
 
-/*
+
     $(document).on("click", "#pick-all-button", function () {
-        let doneTasksCheckox = $(":checkbox:checked");
-        let tempDoneTaskHolde = $(".task-check");
-        console.log(tempDoneTaskHolder)
-        $.each(tempDoneTaskHolder,function(index,value){
-                let tempDoneTaskStringIdHolder = $(this).parent().attr("id");
-                let tempDoneTaskIndexHolder=GetIndexElem(tempDoneTaskStringIdHolder);
-                let tempArrayElement = taskListHolder[tempDoneTaskIndexHolder];
-                tempDoneTaskIdHolder = tempArrayElement.id;
-                if(tempArrayElement.status===false){
-                    
-                     $(`#${tempDoneTaskIdHolder}`).children().remove();
-                }
-            
+       
+        let AllTaskCheckboxList = $(".task-check");
+        console.log(AllTaskCheckboxList);
+        $.each(AllTaskCheckboxList,function(index,value){
+            let tempAllTaskStringIdHolder = $(this).parent().attr("id");
+            let tempAllTaskIndexHolder=GetIndexElem(tempAllTaskStringIdHolder);
+            let tempArrayElement = taskListHolder[tempAllTaskIndexHolder];
+            if(tempArrayElement.status===false){
+                tempArrayElement.status=true;
+            };
+            $("#to-do-list").children().remove(); 
+            render();
+        });
         activeTaskHolder();//
         
     });
-    */
+    
     $(document).on("click", ".task-delete-button", function () {
         let tempElmTaskIdHolder = $(this).parent();
         tempTaskIdHolder = tempElmTaskIdHolder.attr("id");

@@ -13,7 +13,7 @@ jQuery(document).ready(function () {
             taskListHolder.push(taskObject);
             $("#new-task-text").val("");
             $("#to-do-list").children().remove();
-            render();
+            render(taskListHolder);
         }
         else {
             $("#new-task-text").val("");
@@ -37,9 +37,10 @@ jQuery(document).ready(function () {
     
     }
 
-    function render() {
-        if (taskListHolder.length > 0) {
-            $.each(taskListHolder, function (index, value) {
+    function render(array) {
+        let tempStr = "";
+        if (array.length > 0) {
+            $.each(array, function (index, value) {
                 tempHolderArrayElm = value;
                 let tempHolderText = tempHolderArrayElm.text;
                 let tempHolderId = tempHolderArrayElm.id;
@@ -50,14 +51,12 @@ jQuery(document).ready(function () {
                     checked = 'checked';
                 }
 
-                $("#to-do-list").append(
-                    `<li class=list-decorate id=${tempHolderId}>
+                    tempStr=  tempStr + `<li class=list-decorate id=${tempHolderId}>
                         <input id=task-checkbox type=checkbox  ${checked} class=task-check >
                         <span  class=task-txt white-space:pre-line word-break=break-all id=spanId>${tempHolderText} </span>
                         <input type=button class=task-delete-button value=Delete >
                         <br/>
-                    </li>`
-                );
+                    </li>`;
 
                 if (tempHolderStatus) {
                     $(`#${tempHolderId} .task-txt`).addClass("done-task-decoration");
@@ -72,6 +71,7 @@ jQuery(document).ready(function () {
             if(taskListHolder.length>5){
                 paginationFunc(pageCounter);
             }
+            $("#to-do-list").append(`${tempStr}`);
         }
 
         activeTaskHolder()

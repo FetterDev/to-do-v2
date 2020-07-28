@@ -124,7 +124,7 @@ ol{
 .all-task-done-alert{
     margin:0 10vw;
     color: rgb(236, 128, 158);
-    font-size: 2vh;
+    
 }
 .pick-all-button{
     color: rgb(236, 128, 158);
@@ -132,7 +132,7 @@ ol{
     opacity: 0;
     display: flex;
     justify-content: space-between;
-    font-size: 1.5vh;
+    
     
 }
 .pick-all-button-active{

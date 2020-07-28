@@ -45,7 +45,7 @@ jQuery(document).ready(function () {
                 let tempHolderId = tempHolderArrayElm.id;
                 let tempHolderStatus = tempHolderArrayElm.status;
                 let checked = '';
-
+                
                 if (tempHolderStatus) {
                     checked = 'checked';
                 }
@@ -64,13 +64,27 @@ jQuery(document).ready(function () {
                 } else {
                     $(`#${tempHolderId} .task-txt`).removeClass("done-task-decoration");
                 };
-
+                
 
             });
+            let pageCounter= Math.floor(taskListHolder.length / 8);
+            
+            if(taskListHolder.length>5){
+                paginationFunc(pageCounter);
+            }
         }
-        activeTaskHolder();
-       
+
+        activeTaskHolder()
     };
+
+    /*function paginationFunc(counter){
+        $(".bottom-button").append(`<a><span> ${counter}</span></a>`)
+        console.log("11")
+    }
+    */
+
+
+
 
 
     $(document).on("click", "#pick-all-button", function () {

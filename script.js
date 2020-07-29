@@ -1,6 +1,7 @@
 jQuery(document).ready(function () {
     let taskListHolder = new Array();
     let currentPage = 1; 
+    let renderPage = 0
 
     $(document).on('click', '#add-task-button', function () {
         let tabKiller = $("#new-task-text").val();
@@ -16,22 +17,25 @@ jQuery(document).ready(function () {
             $("#new-task-text").val("");
             $("#to-do-list").children().remove();
             currentPage = Math.ceil(taskListHolder.length/5)
-    
-
+            triggerPagination();
         }
         else {
             $("#new-task-text").val("");
+            triggerPagination();
         }
+       
+    });
+    function triggerPagination(){
         if(taskListHolder.length<6){
             
             paginationFuncButton();
-            paginationRenderFunction();
+            paginationRenderFunction(currentPage);
         }else{
             paginationFuncButton();
-            paginationRenderFunction();
+            paginationRenderFunction(currentPage);
         }
-    });
 
+    }
     function paginationFuncButton(){
         let taskCounter= 4 + taskListHolder.length ;
             if(taskCounter %5 === 0 ){
@@ -41,8 +45,8 @@ jQuery(document).ready(function () {
                 
             }
     };
-    function paginationRenderFunction(){
-        let taskCounter= taskListHolder.length ;
+    function paginationRenderFunction(currentPage){
+        
         let tempArrayPagination=taskListHolder;
         let tempSliceStart = (currentPage-1)*5 ;
         let end = tempSliceStart  + 5;
@@ -50,8 +54,13 @@ jQuery(document).ready(function () {
         render(tempArrayForPaginationRender);
     }
    $(document).on("click",".paginationButton",function(){
-       console.log(this)
-    styleForActiveButton($(this));
+       
+        styleForActiveButton($(this));
+       
+        $("#to-do-list").children().remove();  
+        tempIdHolder= this.id;
+        paginationRenderFunction(tempIdHolder);
+       
    });
 
     function activeTaskHolder() {
@@ -146,7 +155,7 @@ jQuery(document).ready(function () {
         $("#to-do-list").children().remove(); 
         paginationRenderFunction(taskListHolder);
         activeTaskHolder();
-  
+        
     });
     
     $(document).on("click", ".task-delete-button", function () {

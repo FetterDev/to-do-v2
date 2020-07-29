@@ -1,6 +1,7 @@
-
 jQuery(document).ready(function () {
     let taskListHolder = new Array();
+    let currentPage = 1; 
+
     $(document).on('click', '#add-task-button', function () {
         let tabKiller = $("#new-task-text").val();
         let taskText = tabKiller.trim();
@@ -19,27 +20,36 @@ jQuery(document).ready(function () {
         else {
             $("#new-task-text").val("");
         }
-        render(taskListHolder);
+        if(taskListHolder.length<6){
+            render(taskListHolder);
+        }else{
+             paginationFuncButton()
+             paginationRenderFunction();
+        }
     });
 
-    function paginationFunc(){
-        if(taskListHolder.length>5){
-            let pageCounter= Math.floor(taskListHolder.length / 5);
-            let taskCounter= taskListHolder.length ;
-            if(taskCounter%6==0){
-               // $("#paginationList").append(`<button class=paginationButton  id=${pageCounter} > ${pageCounter+1} </button> <span></span>`)   
-               tempArrayPagination=taskListHolder;
-               tempArrayForPaginationRender=tempArrayPagination.splice(taskCounter-1,5);
-               console.log(tempArrayForPaginationRender)
-               console.log(taskListHolder)
-                
+    function paginationFuncButton(){
+        let taskCounter= taskListHolder.length ;
+        let pageCounter= Math.floor(taskListHolder.length / 5);
+            if(taskCounter === 30 || taskCounter%5===0){
+                console.log("11")
+                currentPage++; 
+                $("#paginationList").append(`<button class=paginationButton  id=${currentPage} > ${currentPage} </button> <span></span>`)  
             }
-            
-            
-        }
     };
-    //
-    //
+    function paginationRenderFunction(){
+        let taskCounter= taskListHolder.length ;
+        let tempArrayPagination=taskListHolder;
+        let tempArrayForPaginationRender=tempArrayPagination.slice(currentPage*5);
+        console.log(tempArrayForPaginationRender);
+        render(tempArrayForPaginationRender);
+        console.log(taskCounter);
+    }
+    /*
+        let tempArrayPagination=taskListHolder;
+        let tempArrayForPaginationRender=tempArrayPagination.splice(taskCounter,5);
+        render(tempArrayForPaginationRender);
+    */
 
     function activeTaskHolder() {
         $("#taskCounter >").remove();
@@ -92,7 +102,7 @@ jQuery(document).ready(function () {
         $("#to-do-list").append(`${tempStr}`);
         taskDecorate();
         activeTaskHolder()
-        //paginationFunc()
+       
     };
 
 
@@ -149,6 +159,7 @@ jQuery(document).ready(function () {
 
     $("#body-id").keydown(function (event) {
         if (event.keyCode == 13) {
+            $("#to-do-list").children().remove();
             $("#add-task-button").click();
         } 
     });

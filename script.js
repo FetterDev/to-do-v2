@@ -1,9 +1,10 @@
+
 jQuery(document).ready(function () {
     let taskListHolder = new Array();
     $(document).on('click', '#add-task-button', function () {
         let tabKiller = $("#new-task-text").val();
         let taskText = tabKiller.trim();
-      
+        taskText = _.escape([taskText]);
         if (taskText.length != 0) {
             let taskObject = new Object();
             idTemp = Date.now();
@@ -18,9 +19,28 @@ jQuery(document).ready(function () {
         else {
             $("#new-task-text").val("");
         }
-
-
+            //paginationFunc();
+        
+        
     });
+
+    function paginationFunc(){
+        if(taskListHolder.length>5){
+            let pageCounter= Math.floor(taskListHolder.length / 5);
+            let taskCounter= taskListHolder.length ;
+            if(taskCounter%6==0){
+                $("#paginationList").append(`<button class=paginationButton  id=${pageCounter} > ${pageCounter} </button> <span></span>`)   
+            }
+            tempArray=taskListHolder;
+            tempArrayForRender=tempArray.splice(taskCounter-1,5);
+            console.log(tempArrayForRender)
+            
+           
+            
+        }
+    };
+    //
+    //
 
     function activeTaskHolder() {
         $("#taskCounter >").remove();
@@ -31,6 +51,7 @@ jQuery(document).ready(function () {
             $(".pick-all-button").attr('style', 'opacity: 1;');
             if (activeTaskHolder > 1) taskCounterText = "tasks"
             $("#taskCounter").append(` <span> Need do ${activeTaskHolder} ${taskCounterText}</span> `);
+            
         }else{
 
         }
@@ -64,12 +85,7 @@ jQuery(document).ready(function () {
                 
 
             });
-            let pageCounter= Math.floor(taskListHolder.length / 5);
-            
-            if(taskListHolder.length>5 &&  taskListHolder.length%5==0){
-               
-                paginationFunc(pageCounter);
-            }
+           
             
         
        
@@ -78,6 +94,11 @@ jQuery(document).ready(function () {
         taskDecorate();
         activeTaskHolder()
     };
+
+
+    
+    
+
     function taskDecorate(){
         $.each(taskListHolder, function (index, value) {
             tempHolderArrayElm = value;
@@ -91,11 +112,7 @@ jQuery(document).ready(function () {
             };
         });
     }   
-    function paginationFunc(counter){
-        $("#paginationList").append(`<button class=paginationButton > ${counter} </button> <span></span>`)
-     
-    }
-    
+  
 
 
 

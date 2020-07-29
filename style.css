@@ -76,12 +76,14 @@ ol{
     margin: 0 1.82vw;
 }
 .task-txt{
-    max-width: 60vw;
+    max-width: 50vw;
     min-width: 37.35vw;
     border: none;
     margin-right: 6.5vw;
     align-self: flex-start;
     margin-right: 3vw;
+    white-space:pre-line;
+     word-break:break-all;
 
 }
 .task-delete-button{
@@ -119,6 +121,7 @@ ol{
   }
 .list-decorate{
     padding: 0.5vh 0;
+    max-width: 50vw;
     list-style: none;
 }
 .all-task-done-alert{

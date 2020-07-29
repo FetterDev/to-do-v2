@@ -19,7 +19,7 @@ jQuery(document).ready(function () {
         else {
             $("#new-task-text").val("");
         }
-            //paginationFunc();
+            paginationFunc();
         
         
     });
@@ -31,10 +31,10 @@ jQuery(document).ready(function () {
             if(taskCounter%6==0){
                 $("#paginationList").append(`<button class=paginationButton  id=${pageCounter} > ${pageCounter} </button> <span></span>`)   
             }
-            tempArray=taskListHolder;
-            tempArrayForRender=tempArray.splice(taskCounter-1,5);
-            console.log(tempArrayForRender)
-            
+            tempArrayPagination=taskListHolder;
+            tempArrayForPaginationRender=tempArrayPagination.splice(taskCounter-1,5);
+            console.log(tempArrayForPaginationRender)
+            console.log(taskListHolder)
            
             
         }

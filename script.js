@@ -14,14 +14,12 @@ jQuery(document).ready(function () {
             taskListHolder.push(taskObject);
             $("#new-task-text").val("");
             $("#to-do-list").children().remove();
-            render(taskListHolder);
+            
         }
         else {
             $("#new-task-text").val("");
         }
-            paginationFunc();
-        
-        
+        render(taskListHolder);
     });
 
     function paginationFunc(){
@@ -29,13 +27,14 @@ jQuery(document).ready(function () {
             let pageCounter= Math.floor(taskListHolder.length / 5);
             let taskCounter= taskListHolder.length ;
             if(taskCounter%6==0){
-                $("#paginationList").append(`<button class=paginationButton  id=${pageCounter} > ${pageCounter} </button> <span></span>`)   
+               // $("#paginationList").append(`<button class=paginationButton  id=${pageCounter} > ${pageCounter+1} </button> <span></span>`)   
+               tempArrayPagination=taskListHolder;
+               tempArrayForPaginationRender=tempArrayPagination.splice(taskCounter-1,5);
+               console.log(tempArrayForPaginationRender)
+               console.log(taskListHolder)
+                
             }
-            tempArrayPagination=taskListHolder;
-            tempArrayForPaginationRender=tempArrayPagination.splice(taskCounter-1,5);
-            console.log(tempArrayForPaginationRender)
-            console.log(taskListHolder)
-           
+            
             
         }
     };
@@ -93,6 +92,7 @@ jQuery(document).ready(function () {
         $("#to-do-list").append(`${tempStr}`);
         taskDecorate();
         activeTaskHolder()
+        //paginationFunc()
     };
 
 
@@ -205,6 +205,7 @@ jQuery(document).ready(function () {
     });
     
     $(document).on('click', '#show-all-tasks',function(){
+        styleForActiveButton($(this));
         $("#to-do-list").children().remove();    
         render(taskListHolder);
         let tempTaskHolder = $(":checkbox");
@@ -221,6 +222,7 @@ jQuery(document).ready(function () {
     });
 
     $(document).on('click', '#show-actual-tasks',function(){
+        styleForActiveButton($(this));
         $("#to-do-list").children().remove();  
         render(taskListHolder);
         let tempDoneTaskHolder = $(":checkbox:checked");
@@ -241,6 +243,7 @@ jQuery(document).ready(function () {
     });
 
     $(document).on('click', '#show-complete-tasks',function(){
+        styleForActiveButton($(this));
         $("#to-do-list").children().remove(); 
         render(taskListHolder);
         let tempDoneTaskHolder = $(":checkbox:checked");
@@ -271,6 +274,11 @@ jQuery(document).ready(function () {
         let TaskId = parseInt(stringId);
         let TaskIndex = taskListHolder.findIndex(item => item.id == TaskId);
         return TaskIndex ;
+    };
+    function styleForActiveButton(elm) {
+        $(`.activeButtonStyle`).removeClass("activeButtonStyle")
+        console.log(elm);
+       elm.addClass("activeButtonStyle");
     };
 
 });

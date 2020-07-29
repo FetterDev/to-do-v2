@@ -49,7 +49,10 @@ jQuery(document).ready(function () {
         let tempArrayForPaginationRender=tempArrayPagination.slice(tempSliceStart, end);
         render(tempArrayForPaginationRender);
     }
-   
+   $(document).on("click",".paginationButton",function(){
+       console.log(this)
+    styleForActiveButton($(this));
+   });
 
     function activeTaskHolder() {
         $("#taskCounter >").remove();
@@ -141,7 +144,7 @@ jQuery(document).ready(function () {
         
         });
         $("#to-do-list").children().remove(); 
-        render(taskListHolder);
+        paginationRenderFunction(taskListHolder);
         activeTaskHolder();
   
     });
@@ -153,7 +156,7 @@ jQuery(document).ready(function () {
         taskListHolder.splice(deleteTaskArrayIndexHolder, 1);
         $(this).parent().remove();
         $("#to-do-list").children().remove();
-        render(taskListHolder);
+        paginationRenderFunction(taskListHolder);
         activeTaskHolder();
     });
 
@@ -290,5 +293,6 @@ jQuery(document).ready(function () {
         $(`.activeButtonStyle`).removeClass("activeButtonStyle")
        elm.addClass("activeButtonStyle");
     };
+
 
 });

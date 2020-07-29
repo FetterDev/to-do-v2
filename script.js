@@ -15,41 +15,41 @@ jQuery(document).ready(function () {
             taskListHolder.push(taskObject);
             $("#new-task-text").val("");
             $("#to-do-list").children().remove();
-            
+            currentPage = Math.ceil(taskListHolder.length/5)
+    
+
         }
         else {
             $("#new-task-text").val("");
         }
         if(taskListHolder.length<6){
-            render(taskListHolder);
+            
+            paginationFuncButton();
+            paginationRenderFunction();
         }else{
-             paginationFuncButton()
-             paginationRenderFunction();
+            paginationFuncButton();
+            paginationRenderFunction();
         }
     });
 
     function paginationFuncButton(){
-        let taskCounter= taskListHolder.length ;
-        let pageCounter= Math.floor(taskListHolder.length / 5);
-            if(taskCounter === 30 || taskCounter%5===0){
-                console.log("11")
-                currentPage++; 
+        let taskCounter= 4 + taskListHolder.length ;
+            if(taskCounter %5 === 0 ){
                 $("#paginationList").append(`<button class=paginationButton  id=${currentPage} > ${currentPage} </button> <span></span>`)  
+                let styleAddElm = $(`#${currentPage}`);
+                styleForActiveButton(styleAddElm);
+                
             }
     };
     function paginationRenderFunction(){
         let taskCounter= taskListHolder.length ;
         let tempArrayPagination=taskListHolder;
-        let tempArrayForPaginationRender=tempArrayPagination.slice(currentPage*5);
-        console.log(tempArrayForPaginationRender);
+        let tempSliceStart = (currentPage-1)*5 ;
+        let end = tempSliceStart  + 5;
+        let tempArrayForPaginationRender=tempArrayPagination.slice(tempSliceStart, end);
         render(tempArrayForPaginationRender);
-        console.log(taskCounter);
     }
-    /*
-        let tempArrayPagination=taskListHolder;
-        let tempArrayForPaginationRender=tempArrayPagination.splice(taskCounter,5);
-        render(tempArrayForPaginationRender);
-    */
+   
 
     function activeTaskHolder() {
         $("#taskCounter >").remove();
@@ -87,7 +87,7 @@ jQuery(document).ready(function () {
                         <span  class=task-txt white-space:pre-line word-break=break-all id=spanId>${tempHolderText} </span>
                         <input type=button class=task-delete-button value=Delete >
                         <br/>
-                    </li>`;
+                        </li>`;
               
                 
                 
@@ -288,7 +288,6 @@ jQuery(document).ready(function () {
     };
     function styleForActiveButton(elm) {
         $(`.activeButtonStyle`).removeClass("activeButtonStyle")
-        console.log(elm);
        elm.addClass("activeButtonStyle");
     };
 

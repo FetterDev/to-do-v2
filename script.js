@@ -26,35 +26,6 @@ jQuery(document).ready(function () {
         }
        
     });
-    function triggerPagination(){
-        if(taskListHolder.length<6){
-            paginationFuncButton();
-            paginationRenderFunction(taskListHolder,renderPage);
-            
-        }else{
-            paginationFuncButton();
-            paginationRenderFunction(taskListHolder,renderPage);
-            
-        }
-
-    }
-    function paginationFuncButton(){
-        let taskCounter= 4 + taskListHolder.length ;
-            if(taskCounter %5 === 0 ){
-                $("#paginationList").append(`<button class=paginationButton  id=${currentPage} > ${currentPage} </button> <span></span>`)  
-                let styleAddElm = $(`#${currentPage}`);
-                styleForActiveTab(styleAddElm);
-                
-            }
-    };
-    function paginationRenderFunction(array,currentPageRender){
-        
-        let tempArrayPagination=array;
-        let tempSliceStart = (currentPageRender-1)*5 ;
-        let end = tempSliceStart  + 5;
-        let tempArrayForPaginationRender=tempArrayPagination.slice(tempSliceStart, end);
-        render(tempArrayForPaginationRender);
-    }
    $(document).on("click",".paginationButton",function(){
        
         styleForActiveTab($(this));
@@ -66,87 +37,6 @@ jQuery(document).ready(function () {
         activeTaskHolder();
        
    });
-
-    function activeTaskHolder() {
-        $("#taskCounter >").remove();
-        let tempActiveTaskHolder = $(":checkbox:checked").length;
-        let activeTaskHolder = taskListHolder.length - tempActiveTaskHolder;
-        let taskCounterText = "task";
-        if(activeTaskHolder>0){
-            $(".pick-all-button").attr('style', 'opacity: 1;');
-            if (activeTaskHolder > 1) taskCounterText = "tasks"
-            $("#taskCounter").append(` <span> Need do ${activeTaskHolder} ${taskCounterText}</span> `);
-            
-        }else{
-
-        }
-    
-    }
-
-    function render(array) {
-        let tempStr = "";
-        if (array.length > 0) {
-            $.each(array, function (index, value) {
-                tempHolderArrayElm = value;
-                let tempHolderText = tempHolderArrayElm.text;
-                let tempHolderId = tempHolderArrayElm.id;
-                let tempHolderStatus = tempHolderArrayElm.status;
-                let checked = '';
-                
-                
-                if (tempHolderStatus) {
-                    checked = 'checked';
-                }
-
-                    tempStr=  tempStr + `<li class=list-decorate id=${tempHolderId}>
-                        <input id=task-checkbox type=checkbox  ${checked} class=task-check >
-                        <span  class=task-txt white-space:pre-line word-break=break-all id=spanId>${tempHolderText} </span>
-                        <input type=button class=task-delete-button value=Delete >
-                        <br/>
-                        </li>`;
-              
-                
-                
-                
-
-            });
-           
-            
-        
-       
-        }
-        $("#to-do-list").append(`${tempStr}`);
-        taskDecorate();
-        activeTaskHolder()
-       
-    };
-
-
-    
-    
-
-    function taskDecorate(){
-        $.each(taskListHolder, function (index, value) {
-            tempHolderArrayElm = value;
-            let tempHolderId = tempHolderArrayElm.id;
-            let tempHolderStatus = tempHolderArrayElm.status;
-            if (tempHolderStatus) {
-                
-                $(`#${tempHolderId} .task-txt`).addClass("done-task-decoration");
-            } else {
-                $(`#${tempHolderId}.task-txt`).removeClass("done-task-decoration");
-            };
-        });
-    }   
-  
-
-    function GetTempPageCounter(){
-        let tempPageCounter = parseInt( $(".activeTabStyle").attr("id"));
-        return tempPageCounter;
-    }
-
-
-
     $(document).on("click", "#pick-all-button", function () {
         
         let AllTaskCheckboxList = $(".task-check");
@@ -321,7 +211,130 @@ jQuery(document).ready(function () {
         $(`.activeTabStyle`).removeClass("activeTabStyle")
         elm.addClass("activeTabStyle");
     };
+    function taskDecorate(){
+        $.each(taskListHolder, function (index, value) {
+            tempHolderArrayElm = value;
+            let tempHolderId = tempHolderArrayElm.id;
+            let tempHolderStatus = tempHolderArrayElm.status;
+            if (tempHolderStatus) {
+                
+                $(`#${tempHolderId} .task-txt`).addClass("done-task-decoration");
+            } else {
+                $(`#${tempHolderId}.task-txt`).removeClass("done-task-decoration");
+            };
+        });
+    }   
+  
 
+    function GetTempPageCounter(){
+        let tempPageCounter = parseInt( $(".activeTabStyle").attr("id"));
+        return tempPageCounter;
+    }
 
+    function activeTaskHolder() {
+        $("#taskCounter >").remove();
+        let tempActiveTaskHolder = $(":checkbox:checked").length;
+        let activeTaskHolder = taskListHolder.length - tempActiveTaskHolder;
+        let taskCounterText = "task";
+        if(activeTaskHolder>0){
+            $(".pick-all-button").attr('style', 'opacity: 1;');
+            if (activeTaskHolder > 1) taskCounterText = "tasks"
+            $("#taskCounter").append(` <span> Need do ${activeTaskHolder} ${taskCounterText}</span> `);
+            
+        }else{
 
+        }
+    
+    }
+
+    function render(array) {
+        let tempStr = "";
+        if (array.length > 0) {
+            $.each(array, function (index, value) {
+                tempHolderArrayElm = value;
+                let tempHolderText = tempHolderArrayElm.text;
+                let tempHolderId = tempHolderArrayElm.id;
+                let tempHolderStatus = tempHolderArrayElm.status;
+                let checked = '';
+                
+                
+                if (tempHolderStatus) {
+                    checked = 'checked';
+                }
+
+                    tempStr=  tempStr + `<li class=list-decorate id=${tempHolderId}>
+                        <input id=task-checkbox type=checkbox  ${checked} class=task-check >
+                        <span  class=task-txt  id=spanId>${tempHolderText} </span>
+                        <input type=button class=task-delete-button value=Delete >
+                        <br/>
+                        </li>`;
+              
+                
+                
+                
+
+            });
+           
+            
+        
+       
+        }
+        $("#to-do-list").append(`${tempStr}`);
+        taskDecorate();
+        activeTaskHolder()
+       
+    };
+    function activeTaskHolder() {
+        $("#taskCounter >").remove();
+        let tempActiveTaskHolder = $(":checkbox:checked").length;
+        let activeTaskHolder = taskListHolder.length - tempActiveTaskHolder;
+        let taskCounterText = "task";
+        if(activeTaskHolder>0){
+            $(".pick-all-button").attr('style', 'opacity: 1;');
+            if (activeTaskHolder > 1) taskCounterText = "tasks"
+            $("#taskCounter").append(` <span> Need do ${activeTaskHolder} ${taskCounterText}</span> `);
+            
+        }else{
+
+        }
+    
+    }
+
+    function render(array) {
+        let tempStr = "";
+        if (array.length > 0) {
+            $.each(array, function (index, value) {
+                tempHolderArrayElm = value;
+                let tempHolderText = tempHolderArrayElm.text;
+                let tempHolderId = tempHolderArrayElm.id;
+                let tempHolderStatus = tempHolderArrayElm.status;
+                let checked = '';
+                
+                
+                if (tempHolderStatus) {
+                    checked = 'checked';
+                }
+
+                    tempStr=  tempStr + `<li class=list-decorate id=${tempHolderId}>
+                        <input id=task-checkbox type=checkbox  ${checked} class=task-check >
+                        <span  class=task-txt  id=spanId>${tempHolderText} </span>
+                        <input type=button class=task-delete-button value=Delete >
+                        <br/>
+                        </li>`;
+              
+                
+                
+                
+
+            });
+           
+            
+        
+       
+        }
+        $("#to-do-list").append(`${tempStr}`);
+        taskDecorate();
+        activeTaskHolder()
+       
+    };
 });

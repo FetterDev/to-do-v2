@@ -7,7 +7,7 @@ jQuery(document).ready(() => {
   const SHOW_ACTIVE = 1;
   const SHOW_COMLETED = 2;
 
-  let filterTab = "show-all";
+  let filterTab = SHOW_ALL;
 
   $(document).on('click', '#add-task-button', () => {
     const tabKiller = $('#new-task-text').val();
@@ -21,7 +21,6 @@ jQuery(document).ready(() => {
       taskObject.status = false;
       taskList.push(taskObject);
       $('#new-task-text').val('');
-      $('#to-do-list').children().remove();
       pageCount = Math.ceil(taskList.length / 5);
       paginationRender();
     } else {
@@ -29,11 +28,12 @@ jQuery(document).ready(() => {
     }
   });
 
-  function renderPaginationButton() {
-    for(let page = 0; page < pageCount; page++) {
+  function renderPaginationButton(btnCount) {
+    $('#paginationList').children().remove();
+    for(let page = 0; page < btnCount; page++) {
       const activeBtnStyle = (page === currentPage) ? "activeButtonStyle" : '';
       $('#paginationList').append(`
-          <button class="paginationButton ${activeBtnStyle}" id=${page+1}>
+          <button class="paginationButton ${activeBtnStyle}" id=${page}>
             ${page+1}
           </button>
           <span></span>`);
@@ -41,16 +41,17 @@ jQuery(document).ready(() => {
   }
 
   function paginationRender() {
-    renderPaginationButton();
-    const sliceStart = (currentPageRender - 1) * 5;
+    const sliceStart = (currentPage ) * 5;
     const end = sliceStart + 5;
     const filteredTasks = taskList.filter((task) =>
-      filter === "show-all" ||
-      (filter === "show-active" && task.status === false) ||
-      (filter === "show-comleted" && task.status === true)
+      filterTab === SHOW_ALL ||
+      (filterTab === SHOW_ACTIVE && task.status === false) ||
+      (filterTab === SHOW_COMLETED && task.status === true)
     );
+    renderPaginationButton(Math.floor(filteredTasks / 5));
     const arrayForPaginationRender = filteredTasks.slice(sliceStart, end);
     render(arrayForPaginationRender);
+    console.log("bruh",filterTab,currentPage, taskList, filteredTasks)
   }
 
   $(document).on('click', '.paginationButton', function () {
@@ -64,8 +65,8 @@ jQuery(document).ready(() => {
     let taskCounterText = 'task';
     if (activeTasks.length > 0) {
       $('.pick-all-button').attr('style', 'opacity: 1;');
-      if (activeTaskHolder > 1) taskCounterText = 'tasks';
-      $('#taskCounter').append(`<span>Need do ${activeTaskHolder} ${taskCounterText}</span>`);
+      if (activeTasks > 1) taskCounterText = 'tasks';
+      $('#taskCounter').append(`<span>Need do ${activeTasks.length} ${taskCounterText}</span>`);
     };
   }
 
@@ -104,47 +105,25 @@ jQuery(document).ready(() => {
     });
   }
 
-  function GetTempPageCounter() {
-    const tempPageCounter = parseInt($('.activeTabStyle').attr('id'));
-    return tempPageCounter;
-  }
-
   $(document).on('click', '#pick-all-button', () => {
-    const AllTaskCheckboxList = $('.task-check');
-    $.each(AllTaskCheckboxList, function (index, value) {
-      const tempAllTaskStringIdHolder = $(this).parent().attr('id');
-      const tempAllTaskIndexHolder = GetIndexElem(tempAllTaskStringIdHolder);
-      const tempArrayElement = taskList[tempAllTaskIndexHolder];
-      if (tempArrayElement.status === false) {
-        tempArrayElement.status = true;
+    const allTaskCheckboxList = $('.task-check');
+    $.each(allTaskCheckboxList, function (index, value) {
+      const taskStringId = $(this).parent().attr('id');
+      const taskIndex = getIndexElem(taskStringId);
+      const arrayElement = taskList[taskIndex];
+      if (arrayElement.status === false) {
+        arrayElement.status = true;
       }
-      console.log(taskList);
     });
-
-    tempPageCounter = GetTempPageCounter();
-
-    $('#to-do-list').children().remove();
     paginationRender(taskList, tempPageCounter);
-    activeTaskHolder();
   });
 
   $(document).on('click', '.task-delete-button', function () {
-    const tempElmTaskIdHolder = $(this).parent();
-    tempTaskStringIdHolder = tempElmTaskIdHolder.attr('id');
-    const deleteTaskArrayIndexHolder = GetIndexElem(tempTaskStringIdHolder);
-    const tempCurrentPageHldr = currentPage;
-    const tempIdCurrentPageButHldr = currentPage;
-    taskList.splice(deleteTaskArrayIndexHolder, 1);
-
-    $(this).parent().remove();
-
-    if (taskList.length < tempCurrentPageHldr * 5 - 1) {
-      $(`${tempIdCurrentPageButHldr}`).remove();
-    }
-    $('#to-do-list').children().remove();
-    const tempPageCounter = GetTempPageCounter();
-    paginationRender(taskList, tempPageCounter);
-    activeTaskHolder();
+    const elmTaskIdHolder = $(this).parent();
+    const tempTaskStringIdHolder = elmTaskIdHolder.attr('id');
+    const deleteTaskArrayIndex = getIndexElem(tempTaskStringIdHolder);
+    taskList.splice(deleteTaskArrayIndex, 1);
+    paginationRender();
   });
 
   $('#body-id').keydown((event) => {
@@ -153,110 +132,69 @@ jQuery(document).ready(() => {
     taskText = _.escape([taskText]);
     if (taskText.length != 0) {
       if (event.keyCode == 13) {
-        $('#to-do-list').children().remove();
+       
         $('#add-task-button').click();
       }
     }
   });
 
   $(document).on('dblclick', '.task-txt', function () {
-    const tempSpanParentStringIdHolder = $(this).parent().attr('id');
-    const indexSpanParent = GetIndexElem(tempSpanParentStringIdHolder);
+    const spanParentId = $(this).parent().attr('id');
+    const indexSpanParent = getIndexElem(spanParentId);
     $(this).replaceWith(`<input id=temp-txt-editor  value="${this.innerText}" type=text> </input>`);
 
     $('#body-id').keydown((event) => {
       if (event.keyCode == 13) {
-        const tempInputValueHolder = $('#temp-txt-editor').val();
-        taskList[indexSpanParent].text = tempInputValueHolder;
-        $('#to-do-list').children().remove();
-        render(taskList);//
+        const inputValue = $('#temp-txt-editor').val();
+        taskList[indexSpanParent].text = inputValue;
+        paginationRender();
       }
     });
   });
+  
+  $(document).on('click', '#delete-all-completeTask-button', () => {
+    const activeTask = $(':checkbox:checked');
+    if (activeTask.length > 0) {
+      $.each(activeTask, (index, value) => {
+        const tempObjectArrayHolder = $(value).parent();
+        const tempTaskStringIdHolder = tempObjectArrayHolder.attr('id');
+        taskArrayDeleteCompleteTaskIndexHolder = getIndexElem(tempTaskStringIdHolder);
+        taskList.splice(taskArrayDeleteCompleteTaskIndexHolder, 1);
+      });
+    } else {
+      $('#to-do-list').append('<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>');
+    }
+    paginationRender();
+  });
 
   $(document).on('click', '.task-check', function () {
-    $(this).siblings('.task-txt').addClass('done-task-decoration');
     const tempElmCheckboxIdHolder = $(this).parent();
     const tempCheckboxParentStringIdHolder = tempElmCheckboxIdHolder.attr('id');
-    const taskArrayIndexHolder = GetIndexElem(tempCheckboxParentStringIdHolder);
-    const tempArrayElement = taskList[taskArrayIndexHolder];
+    const taskArrayIndex = getIndexElem(tempCheckboxParentStringIdHolder);
+    const tempArrayElement = taskList[taskArrayIndex];
     if ($(this).is(':checked')) {
       tempArrayElement.status = true;
     } else {
       tempArrayElement.status = false;
     }
-    taskList[taskArrayIndexHolder] = tempArrayElement;
-    activeTaskHolder();
+    taskList[taskArrayIndex] = tempArrayElement;
+    paginationRender();
   });
 
-  $(document).on('click', '#delete-all-completeTask-button', () => {
-    const tempActiveTaskHolder = $(':checkbox:checked');
-    if (tempActiveTaskHolder.length > 0) {
-      $.each(tempActiveTaskHolder, (index, value) => {
-        const tempObjectArrayHolder = $(value).parent();
-        const tempTaskStringIdHolder = tempObjectArrayHolder.attr('id');
-        taskArrayDeleteCompleteTaskIndexHolder = GetIndexElem(tempTaskStringIdHolder);
-        taskList.splice(taskArrayDeleteCompleteTaskIndexHolder, 1);
-      });
 
-      $('#to-do-list').children().remove();
-      render(taskList);//
-    } else {
-      $('#to-do-list').children().remove();
-      $('#to-do-list').append('<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>');
-    }
-  });
-
-  $(document).on('click', '#show-all-tasks', function () {
+  $('.tab').on('click', function (event) {
     styleForActiveButton($(this));
-    $('#to-do-list').children().remove();
-    if (taskList.length > 1) {
-      $('#to-do-list').children().remove();
-      const tempPageCounter = GetTempPageCounter();
-      paginationRender(taskList, tempPageCounter);
-    } else {
-      $('#to-do-list').children().remove();
+    filterTab = event.target.id;
+    if (taskList.length === 0) {
       $('#to-do-list').append('<span class=all-task-done-alert> Hurry to add new tasks to your to-do list! </span>');
     }
+    paginationRender();
   });
 
-  $(document).on('click', '#show-actual-tasks', function () {
-    styleForActiveButton($(this));
-    $('#to-do-list').children().remove();
-
-    const tempPageCounter = GetTempPageCounter();
-    const tempCounterActiveTaskHolder = taskList.filter((e) => e.status === false);
-    console.log(tempCounterActiveTaskHolder);
-    if (tempCounterActiveTaskHolder.length > 0) {
-      paginationRender(tempCounterActiveTaskHolder, tempPageCounter);
-      console.log('1');
-    } else {
-      $('#to-do-list').children().remove();
-      $('#to-do-list').append('<span class=all-task-done-alert> Yooo dude, all task is done. Your realy awecome! </span>');
-    }
-
-    $(document).on('click', '.task-check', function () {
-      $(this).parent().remove();
-    });
-  });
-
-  $(document).on('click', '#show-complete-tasks', function () {
-    styleForActiveButton($(this));
-    $('#to-do-list').children().remove();
-    const tempPageCounter = GetTempPageCounter();
-    const tempCounterDoneTaskHolder = taskList.filter((e) => e.status === true);
-    if (tempCounterDoneTaskHolder.length > 0) {
-      paginationRender(tempCounterDoneTaskHolder, tempPageCounter);
-    } else {
-      $('#to-do-list').children().remove();
-      $('#to-do-list').append('<span class=all-task-done-alert> Bro you haven\'t done noone task :( </span>');
-    }
-  });
-
-  function GetIndexElem(stringId) {
-    const TaskId = parseInt(stringId);
-    const TaskIndex = taskList.findIndex((item) => item.id == TaskId);
-    return TaskIndex;
+  function getIndexElem(stringId) {
+    const taskId = parseInt(stringId);
+    const taskIndex = taskList.findIndex((item) => item.id == taskId);
+    return taskIndex;
   }
   function styleForActiveButton(elm) {
     $('.activeButtonStyle').removeClass('activeButtonStyle');

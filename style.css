@@ -138,3 +138,19 @@ ol{
 .pick-all-button-active{
     opacity: 1;
 }
+.paginationMargin{
+    margin-right:  5vw;
+}
+.paginationButton{
+    font-size: 1vh;
+    padding:0.5vh;
+    border-radius: 5px;
+    border: 1px solid rgb(236, 128, 158);
+    background-color: rgba(107,156,200,0.6);
+    
+}
+.paginationSpanStyle{
+    
+    
+    color: rgb(236, 128, 158);
+}

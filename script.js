@@ -17,6 +17,7 @@ jQuery(document).ready(function () {
             $("#new-task-text").val("");
             $("#to-do-list").children().remove();
             currentPage = Math.ceil(taskListHolder.length/5)
+            renderPage = Math.ceil(taskListHolder.length/5)
             triggerPagination();
         }
         else {
@@ -27,12 +28,13 @@ jQuery(document).ready(function () {
     });
     function triggerPagination(){
         if(taskListHolder.length<6){
-            
             paginationFuncButton();
-            paginationRenderFunction(currentPage);
+            paginationRenderFunction(taskListHolder,renderPage);
+            
         }else{
             paginationFuncButton();
-            paginationRenderFunction(currentPage);
+            paginationRenderFunction(taskListHolder,renderPage);
+            
         }
 
     }
@@ -41,25 +43,26 @@ jQuery(document).ready(function () {
             if(taskCounter %5 === 0 ){
                 $("#paginationList").append(`<button class=paginationButton  id=${currentPage} > ${currentPage} </button> <span></span>`)  
                 let styleAddElm = $(`#${currentPage}`);
-                styleForActiveButton(styleAddElm);
+                styleForActiveTab(styleAddElm);
                 
             }
     };
-    function paginationRenderFunction(currentPage){
+    function paginationRenderFunction(array,currentPageRender){
         
-        let tempArrayPagination=taskListHolder;
-        let tempSliceStart = (currentPage-1)*5 ;
+        let tempArrayPagination=array;
+        let tempSliceStart = (currentPageRender-1)*5 ;
         let end = tempSliceStart  + 5;
         let tempArrayForPaginationRender=tempArrayPagination.slice(tempSliceStart, end);
         render(tempArrayForPaginationRender);
     }
    $(document).on("click",".paginationButton",function(){
        
-        styleForActiveButton($(this));
+        styleForActiveTab($(this));
        
         $("#to-do-list").children().remove();  
         tempIdHolder= this.id;
-        paginationRenderFunction(tempIdHolder);
+        paginationRenderFunction(taskListHolder, tempIdHolder);
+        activeTaskHolder();
        
    });
 
@@ -136,12 +139,15 @@ jQuery(document).ready(function () {
     }   
   
 
-
+    function GetTempPageCounter(){
+        let tempPageCounter = parseInt( $(".activeTabStyle").attr("id"));
+        return tempPageCounter;
+    }
 
 
 
     $(document).on("click", "#pick-all-button", function () {
-       
+        
         let AllTaskCheckboxList = $(".task-check");
         $.each(AllTaskCheckboxList,function(index,value){
             let tempAllTaskStringIdHolder = $(this).parent().attr("id");
@@ -150,10 +156,13 @@ jQuery(document).ready(function () {
             if(tempArrayElement.status===false){
                 tempArrayElement.status=true;
             };
-        
+            console.log(taskListHolder)
         });
+        
+        tempPageCounter = GetTempPageCounter();
+        
         $("#to-do-list").children().remove(); 
-        paginationRenderFunction(taskListHolder);
+        paginationRenderFunction(taskListHolder,tempPageCounter);
         activeTaskHolder();
         
     });
@@ -162,25 +171,40 @@ jQuery(document).ready(function () {
         let tempElmTaskIdHolder = $(this).parent();
         tempTaskStringIdHolder = tempElmTaskIdHolder.attr("id");
         let deleteTaskArrayIndexHolder = GetIndexElem (tempTaskStringIdHolder);
+        let tempCurrentPageHldr= currentPage;
+        let tempIdCurrentPageButHldr= currentPage;
         taskListHolder.splice(deleteTaskArrayIndexHolder, 1);
+       
         $(this).parent().remove();
+       
+     
+        if(taskListHolder.length<tempCurrentPageHldr*5-1){
+         $(`${tempIdCurrentPageButHldr}`).remove();
+           
+        }
         $("#to-do-list").children().remove();
-        paginationRenderFunction(taskListHolder);
+        let tempPageCounter = GetTempPageCounter();
+        paginationRenderFunction(taskListHolder,tempPageCounter);
         activeTaskHolder();
     });
 
     $("#body-id").keydown(function (event) {
-        if (event.keyCode == 13) {
-            $("#to-do-list").children().remove();
-            $("#add-task-button").click();
-        } 
+        let tabKiller = $("#new-task-text").val();
+        let taskText = tabKiller.trim();
+        taskText = _.escape([taskText]);
+        if (taskText.length != 0) {
+            if (event.keyCode == 13) {
+                $("#to-do-list").children().remove();
+                $("#add-task-button").click();
+            } 
+        }
     });
 
     $(document).on("dblclick",".task-txt", function(){
             let tempSpanParentStringIdHolder= $(this).parent().attr("id");
             let indexSpanParent = GetIndexElem(tempSpanParentStringIdHolder);
             $(this).replaceWith(`<input id=temp-txt-editor  value="${this.innerText}" type=text> </input>`)
-            
+           
             $("#body-id").keydown(function (event) {
                 if (event.keyCode == 13 ) {
                    
@@ -228,7 +252,7 @@ jQuery(document).ready(function () {
     });
     
     $(document).on('click', '#show-all-tasks',function(){
-        styleForActiveButton($(this));
+        styleForActiveTab($(this));
         $("#to-do-list").children().remove();    
         render(taskListHolder);
         let tempTaskHolder = $(":checkbox");
@@ -300,8 +324,13 @@ jQuery(document).ready(function () {
     };
     function styleForActiveButton(elm) {
         $(`.activeButtonStyle`).removeClass("activeButtonStyle")
-       elm.addClass("activeButtonStyle");
+        elm.addClass("activeButtonStyle");
     };
+    function styleForActiveTab(elm) {
+        $(`.activeTabStyle`).removeClass("activeTabStyle")
+        elm.addClass("activeTabStyle");
+    };
+
 
 
 });

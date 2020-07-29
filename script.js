@@ -1,6 +1,5 @@
-/* eslint-disable */
 jQuery(document).ready(() => {
-  let taskList = [];
+  const taskList = [];
   let pageCount = 1;
   let currentPage = 0;
   const SHOW_ALL = 0;
@@ -9,26 +8,14 @@ jQuery(document).ready(() => {
 
   let filterTab = SHOW_ALL;
 
-  $(document).on('click', '#add-task-button', () => {
-    const tabKiller = $('#new-task-text').val();
-    let taskText = tabKiller.trim();
-    taskText = _.escape([taskText]);
-    if (taskText.length != 0) {
-      const taskObject = {};
-      idTemp = Date.now();
-      taskObject.text = taskText;
-      taskObject.id = idTemp;
-      taskObject.status = false;
-      taskList.push(taskObject);
-      $('#new-task-text').val('');
-      pageCount = Math.ceil(taskList.length / 5);
-      paginationRender();
-    } else {
-      $('#new-task-text').val('');
-    }
-  });
+
 
   function renderPaginationButton(btnCount) {
+    console.log(currentPage, btnCount)
+    if( currentPage<0) currentPage=0;
+    if (currentPage >= btnCount) {
+      currentPage = btnCount-1;
+    }
     $('#paginationList').children().remove();
     for(let page = 0; page < btnCount; page++) {
       const activeBtnStyle = (page === currentPage) ? "activeButtonStyle" : '';
@@ -41,21 +28,37 @@ jQuery(document).ready(() => {
   }
 
   function paginationRender() {
-    const sliceStart = (currentPage ) * 5;
-    const end = sliceStart + 5;
     const filteredTasks = taskList.filter((task) =>
-      filterTab === SHOW_ALL ||
-      (filterTab === SHOW_ACTIVE && task.status === false) ||
-      (filterTab === SHOW_COMLETED && task.status === true)
+    filterTab === SHOW_ALL ||
+    (filterTab === SHOW_ACTIVE && task.status === false) ||
+    (filterTab === SHOW_COMLETED && task.status === true)
     );
-    renderPaginationButton(Math.floor(filteredTasks / 5));
+    renderPaginationButton(Math.ceil(filteredTasks.length / 5));
+    const sliceStart = (currentPage) * 5;
+    const end = sliceStart + 5;
     const arrayForPaginationRender = filteredTasks.slice(sliceStart, end);
     render(arrayForPaginationRender);
-    console.log("bruh",filterTab,currentPage, taskList, filteredTasks)
+    // console.log("bruh",filterTab,currentPage, taskList, filteredTasks)
   }
-
+  $(document).on('click', '#add-task-button', () => {
+    const tabKiller = $('#new-task-text').val();
+    let taskText = tabKiller.trim();
+    taskText = _.escape([taskText]);
+    if (taskText.length !== 0) {
+      const taskObject = {};
+      const idTemp = Date.now();
+      taskObject.text = taskText;
+      taskObject.id = idTemp;
+      taskObject.status = false;
+      taskList.push(taskObject);
+      $('#new-task-text').val('');
+      paginationRender();
+    } else {
+      $('#new-task-text').val('');
+    }
+  });
   $(document).on('click', '.paginationButton', function () {
-    currentPage = this.id;
+    currentPage = parseInt(this.id);
     paginationRender();
   });
 
@@ -115,7 +118,7 @@ jQuery(document).ready(() => {
         arrayElement.status = true;
       }
     });
-    paginationRender(taskList, tempPageCounter);
+    paginationRender();
   });
 
   $(document).on('click', '.task-delete-button', function () {
@@ -183,8 +186,8 @@ jQuery(document).ready(() => {
 
 
   $('.tab').on('click', function (event) {
-    styleForActiveButton($(this));
-    filterTab = event.target.id;
+    styleForActiveTab($(this));
+    filterTab = parseInt(event.target.id);
     if (taskList.length === 0) {
       $('#to-do-list').append('<span class=all-task-done-alert> Hurry to add new tasks to your to-do list! </span>');
     }

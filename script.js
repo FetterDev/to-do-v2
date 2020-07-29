@@ -2,7 +2,7 @@ jQuery(document).ready(function () {
     let taskListHolder = new Array();
     let currentPage = 1; 
     let renderPage = 0
-
+    let renderCompletePage=1;
     $(document).on('click', '#add-task-button', function () {
         let tabKiller = $("#new-task-text").val();
         let taskText = tabKiller.trim();
@@ -61,6 +61,7 @@ jQuery(document).ready(function () {
        
         $("#to-do-list").children().remove();  
         tempIdHolder= this.id;
+       
         paginationRenderFunction(taskListHolder, tempIdHolder);
         activeTaskHolder();
        
@@ -252,14 +253,15 @@ jQuery(document).ready(function () {
     });
     
     $(document).on('click', '#show-all-tasks',function(){
-        styleForActiveTab($(this));
+        styleForActiveButton($(this));
         $("#to-do-list").children().remove();    
         render(taskListHolder);
         let tempTaskHolder = $(":checkbox");
         if(tempTaskHolder.length>1){
             
             $("#to-do-list").children().remove();    
-            render(taskListHolder);
+            let tempPageCounter = GetTempPageCounter();
+            paginationRenderFunction(taskListHolder,tempPageCounter);
         }else{
             $("#to-do-list").children().remove();
             $(`#to-do-list`).append(`<span class=all-task-done-alert> Hurry to add new tasks to your to-do list! </span>`)
@@ -271,14 +273,14 @@ jQuery(document).ready(function () {
     $(document).on('click', '#show-actual-tasks',function(){
         styleForActiveButton($(this));
         $("#to-do-list").children().remove();  
-        render(taskListHolder);
-        let tempDoneTaskHolder = $(":checkbox:checked");
-        let tempCounterDoneTaskHolder= taskListHolder.length - tempDoneTaskHolder.length;
+        
+        let tempPageCounter = GetTempPageCounter()
+        let tempCounterActiveTaskHolder = taskListHolder.filter(e => e.status === false);
+        if(tempCounterActiveTaskHolder>0){
+            
+           
+            paginationRenderFunction(tempCounterActiveTaskHolder,tempPageCounter);
 
-            if(tempCounterDoneTaskHolder>0){
-                $.each(tempDoneTaskHolder,function(index,value){
-                $(this).parent().remove();
-            })     
             } else{
                 $("#to-do-list").children().remove();
                 $(`#to-do-list`).append(`<span class=all-task-done-alert> Yooo dude, all task is done. Your realy awecome! </span>`)
@@ -292,23 +294,12 @@ jQuery(document).ready(function () {
     $(document).on('click', '#show-complete-tasks',function(){
         styleForActiveButton($(this));
         $("#to-do-list").children().remove(); 
-        render(taskListHolder);
-        let tempDoneTaskHolder = $(":checkbox:checked");
-        if(tempDoneTaskHolder.length>0){
+        let tempPageCounter = GetTempPageCounter()
+        let tempCounterDoneTaskHolder = taskListHolder.filter(e => e.status === true);
+        if(tempCounterDoneTaskHolder.length>0){
 
-            let tempDoneTaskHolder = $(".task-check");
-            $.each(tempDoneTaskHolder,function(index,value){
-                    let tempDoneTaskStringIdHolder = $(this).parent().attr("id");
-                    let tempDoneTaskIndexHolder=GetIndexElem(tempDoneTaskStringIdHolder);
-                    let tempArrayElement = taskListHolder[tempDoneTaskIndexHolder];
-                    tempDoneTaskIdHolder = tempArrayElement.id;
-                    if(tempArrayElement.status===false){
-                        
-                         $(`#${tempDoneTaskIdHolder}`).children().remove();
-                    }
-                
-            });
-
+         
+          paginationRenderFunction(tempCounterDoneTaskHolder,tempPageCounter);
         }else{
             $("#to-do-list").children().remove();
             $(`#to-do-list`).append(`<span class=all-task-done-alert> Bro you haven't done noone task :( </span>`)

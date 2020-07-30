@@ -110,6 +110,7 @@ jQuery(document).ready(() => {
       $('#new-task-text').val('');
     }
   });
+  // eslint-disable-next-line func-names
   $(document).on('click', '.paginationButton', function () {
     currentPage = parseInt(this.id, 10);
     paginationRender();
@@ -129,6 +130,7 @@ jQuery(document).ready(() => {
     paginationRender();
   });
 
+  // eslint-disable-next-line func-names
   $(document).on('click', '.task-delete-button', function () {
     const elmTaskIdHolder = $(this).parent();
     const tempTaskStringIdHolder = elmTaskIdHolder.attr('id');

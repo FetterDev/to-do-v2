@@ -1,6 +1,5 @@
 jQuery(document).ready(() => {
   const taskList = [];
-  let pageCount = 1;
   let currentPage = 0;
   const SHOW_ALL = 0;
   const SHOW_ACTIVE = 1;
@@ -8,59 +7,32 @@ jQuery(document).ready(() => {
 
   let filterTab = SHOW_ALL;
 
+  function getIndexElem(stringId) {
+    const taskId = parseInt(stringId, 10);
+    const taskIndex = taskList.findIndex((item) => item.id === taskId);
+    return taskIndex;
+  }
 
+  function styleForActiveTab(elm) {
+    $('.activeTabStyle').removeClass('activeTabStyle');
+    elm.addClass('activeTabStyle');
+  }
 
   function renderPaginationButton(btnCount) {
-    console.log(currentPage, btnCount)
-    if( currentPage<0) currentPage=0;
+    if (currentPage < 0) currentPage = 0;
     if (currentPage >= btnCount) {
-      currentPage = btnCount-1;
+      currentPage = btnCount - 1;
     }
     $('#paginationList').children().remove();
-    for(let page = 0; page < btnCount; page++) {
-      const activeBtnStyle = (page === currentPage) ? "activeButtonStyle" : '';
+    for (let page = 0; page < btnCount; page += 1) {
+      const activeBtnStyle = (page === currentPage) ? 'activeButtonStyle' : '';
       $('#paginationList').append(`
           <button class="paginationButton ${activeBtnStyle}" id=${page}>
-            ${page+1}
+            ${page + 1}
           </button>
           <span></span>`);
     }
   }
-
-  function paginationRender() {
-    const filteredTasks = taskList.filter((task) =>
-    filterTab === SHOW_ALL ||
-    (filterTab === SHOW_ACTIVE && task.status === false) ||
-    (filterTab === SHOW_COMLETED && task.status === true)
-    );
-    renderPaginationButton(Math.ceil(filteredTasks.length / 5));
-    const sliceStart = (currentPage) * 5;
-    const end = sliceStart + 5;
-    const arrayForPaginationRender = filteredTasks.slice(sliceStart, end);
-    render(arrayForPaginationRender);
-    // console.log("bruh",filterTab,currentPage, taskList, filteredTasks)
-  }
-  $(document).on('click', '#add-task-button', () => {
-    const tabKiller = $('#new-task-text').val();
-    let taskText = tabKiller.trim();
-    taskText = _.escape([taskText]);
-    if (taskText.length !== 0) {
-      const taskObject = {};
-      const idTemp = Date.now();
-      taskObject.text = taskText;
-      taskObject.id = idTemp;
-      taskObject.status = false;
-      taskList.push(taskObject);
-      $('#new-task-text').val('');
-      paginationRender();
-    } else {
-      $('#new-task-text').val('');
-    }
-  });
-  $(document).on('click', '.paginationButton', function () {
-    currentPage = parseInt(this.id);
-    paginationRender();
-  });
 
   function activeTaskHolder() {
     $('#taskCounter >').remove();
@@ -70,7 +42,17 @@ jQuery(document).ready(() => {
       $('.pick-all-button').attr('style', 'opacity: 1;');
       if (activeTasks > 1) taskCounterText = 'tasks';
       $('#taskCounter').append(`<span>Need do ${activeTasks.length} ${taskCounterText}</span>`);
-    };
+    }
+  }
+
+  function taskDecorate() {
+    taskList.forEach((task) => {
+      if (task.status) {
+        $(`#${task.id} .task-txt`).addClass('done-task-decoration');
+      } else {
+        $(`#${task.id}.task-txt`).removeClass('done-task-decoration');
+      }
+    });
   }
 
   function render(array) {
@@ -98,19 +80,45 @@ jQuery(document).ready(() => {
     activeTaskHolder();
   }
 
-  function taskDecorate() {
-    taskList.forEach((task) => {
-      if (task.status) {
-        $(`#${task.id} .task-txt`).addClass('done-task-decoration');
-      } else {
-        $(`#${task.id}.task-txt`).removeClass('done-task-decoration');
-      }
-    });
+  function paginationRender() {
+    const filteredTasks = taskList.filter((task) => filterTab === SHOW_ALL
+    || (filterTab === SHOW_ACTIVE && task.status === false)
+    || (filterTab === SHOW_COMLETED && task.status === true));
+    renderPaginationButton(Math.ceil(filteredTasks.length / 5));
+    const sliceStart = (currentPage) * 5;
+    const end = sliceStart + 5;
+    const arrayForPaginationRender = filteredTasks.slice(sliceStart, end);
+    render(arrayForPaginationRender);
+    // console.log("bruh",filterTab,currentPage, taskList, filteredTasks)
   }
+
+  $(document).on('click', '#add-task-button', () => {
+    const tabKiller = $('#new-task-text').val();
+    let taskText = tabKiller.trim();
+    // eslint-disable-next-line no-undef
+    taskText = _.escape([taskText]);
+    if (taskText.length !== 0) {
+      const taskObject = {};
+      const idTemp = Date.now();
+      taskObject.text = taskText;
+      taskObject.id = idTemp;
+      taskObject.status = false;
+      taskList.push(taskObject);
+      $('#new-task-text').val('');
+      paginationRender();
+    } else {
+      $('#new-task-text').val('');
+    }
+  });
+  $(document).on('click', '.paginationButton', function () {
+    currentPage = parseInt(this.id, 10);
+    paginationRender();
+  });
 
   $(document).on('click', '#pick-all-button', () => {
     const allTaskCheckboxList = $('.task-check');
-    $.each(allTaskCheckboxList, function (index, value) {
+    // eslint-disable-next-line func-names
+    $.each(allTaskCheckboxList, function () {
       const taskStringId = $(this).parent().attr('id');
       const taskIndex = getIndexElem(taskStringId);
       const arrayElement = taskList[taskIndex];
@@ -132,36 +140,37 @@ jQuery(document).ready(() => {
   $('#body-id').keydown((event) => {
     const tabKiller = $('#new-task-text').val();
     let taskText = tabKiller.trim();
+    // eslint-disable-next-line no-undef
     taskText = _.escape([taskText]);
-    if (taskText.length != 0) {
-      if (event.keyCode == 13) {
-       
+    if (taskText.length !== 0) {
+      if (event.keyCode === 13) {
         $('#add-task-button').click();
       }
     }
   });
 
+  // eslint-disable-next-line func-names
   $(document).on('dblclick', '.task-txt', function () {
     const spanParentId = $(this).parent().attr('id');
     const indexSpanParent = getIndexElem(spanParentId);
     $(this).replaceWith(`<input id=temp-txt-editor  value="${this.innerText}" type=text> </input>`);
 
     $('#body-id').keydown((event) => {
-      if (event.keyCode == 13) {
+      if (event.keyCode === 13) {
         const inputValue = $('#temp-txt-editor').val();
         taskList[indexSpanParent].text = inputValue;
         paginationRender();
       }
     });
   });
-  
+
   $(document).on('click', '#delete-all-completeTask-button', () => {
     const activeTask = $(':checkbox:checked');
     if (activeTask.length > 0) {
       $.each(activeTask, (index, value) => {
         const tempObjectArrayHolder = $(value).parent();
         const tempTaskStringIdHolder = tempObjectArrayHolder.attr('id');
-        taskArrayDeleteCompleteTaskIndexHolder = getIndexElem(tempTaskStringIdHolder);
+        const taskArrayDeleteCompleteTaskIndexHolder = getIndexElem(tempTaskStringIdHolder);
         taskList.splice(taskArrayDeleteCompleteTaskIndexHolder, 1);
       });
     } else {
@@ -170,6 +179,7 @@ jQuery(document).ready(() => {
     paginationRender();
   });
 
+  // eslint-disable-next-line func-names
   $(document).on('click', '.task-check', function () {
     const tempElmCheckboxIdHolder = $(this).parent();
     const tempCheckboxParentStringIdHolder = tempElmCheckboxIdHolder.attr('id');
@@ -184,27 +194,13 @@ jQuery(document).ready(() => {
     paginationRender();
   });
 
-
+  // eslint-disable-next-line func-names
   $('.tab').on('click', function (event) {
     styleForActiveTab($(this));
-    filterTab = parseInt(event.target.id);
+    filterTab = parseInt(event.target.id, 10);
     if (taskList.length === 0) {
       $('#to-do-list').append('<span class=all-task-done-alert> Hurry to add new tasks to your to-do list! </span>');
     }
     paginationRender();
   });
-
-  function getIndexElem(stringId) {
-    const taskId = parseInt(stringId);
-    const taskIndex = taskList.findIndex((item) => item.id == taskId);
-    return taskIndex;
-  }
-  function styleForActiveButton(elm) {
-    $('.activeButtonStyle').removeClass('activeButtonStyle');
-    elm.addClass('activeButtonStyle');
-  }
-  function styleForActiveTab(elm) {
-    $('.activeTabStyle').removeClass('activeTabStyle');
-    elm.addClass('activeTabStyle');
-  }
 });

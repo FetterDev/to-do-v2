@@ -156,11 +156,13 @@ jQuery(document).ready(() => {
     const spanParentId = $(this).parent().attr('id');
     const indexSpanParent = getIndexElem(spanParentId);
     $(this).replaceWith(`<input id=temp-txt-editor  value="${this.innerText}" type=text> </input>`);
-
     $('#body-id').keydown((event) => {
       if (event.keyCode === 13) {
-        const inputValue = $('#temp-txt-editor').val();
-        taskList[indexSpanParent].text = inputValue;
+        const tabKiller = $('#temp-txt-editor').val();
+        let taskText = tabKiller.trim();
+        // eslint-disable-next-line no-undef
+        taskText = _.escape([taskText]);
+        taskList[indexSpanParent].text = taskText;
         paginationRender();
       }
     });

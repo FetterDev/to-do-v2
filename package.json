@@ -14,6 +14,8 @@
   "homepage": "https://bitbucket.org/dvezmenov/todo_vezmenov#readme",
   "description": "",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.7.1",
+    "@typescript-eslint/parser": "^3.7.1",
     "eslint": "^7.5.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0"

@@ -3,7 +3,7 @@ jQuery(document).ready(() => {
   let currentPage = 0;
   const SHOW_ALL = 0;
   const SHOW_ACTIVE = 1;
-  const SHOW_COMLETED = 2;
+  const SHOW_COMPLETED = 2;
 
   let filterTab = SHOW_ALL;
 
@@ -83,13 +83,12 @@ jQuery(document).ready(() => {
   function paginationRender() {
     const filteredTasks = taskList.filter((task) => filterTab === SHOW_ALL
     || (filterTab === SHOW_ACTIVE && task.status === false)
-    || (filterTab === SHOW_COMLETED && task.status === true));
+    || (filterTab === SHOW_COMPLETED && task.status === true));
     renderPaginationButton(Math.ceil(filteredTasks.length / 5));
     const sliceStart = (currentPage) * 5;
     const end = sliceStart + 5;
     const arrayForPaginationRender = filteredTasks.slice(sliceStart, end);
     render(arrayForPaginationRender);
-    // console.log("bruh",filterTab,currentPage, taskList, filteredTasks)
   }
 
   $(document).on('click', '#add-task-button', () => {
@@ -117,16 +116,18 @@ jQuery(document).ready(() => {
   });
 
   $(document).on('click', '#pick-all-button', () => {
-    const allTaskCheckboxList = $('.task-check');
-    // eslint-disable-next-line func-names
-    $.each(allTaskCheckboxList, function () {
-      const taskStringId = $(this).parent().attr('id');
-      const taskIndex = getIndexElem(taskStringId);
-      const arrayElement = taskList[taskIndex];
-      if (arrayElement.status === false) {
-        arrayElement.status = true;
-      }
-    });
+    if ($('#pick-all-button').is(':checked')) {
+      // eslint-disable-next-line func-names
+      $.each(taskList, function () {
+        this.status = true;
+      });
+    } else {
+      // eslint-disable-next-line func-names
+      $.each(taskList, function () {
+        this.status = false;
+      });
+    }
+
     paginationRender();
   });
 
@@ -151,11 +152,16 @@ jQuery(document).ready(() => {
     }
   });
 
+  $(document).on('blur', '.inputFocus', () => {
+    paginationRender();
+  });
+
   // eslint-disable-next-line func-names
   $(document).on('dblclick', '.task-txt', function () {
     const spanParentId = $(this).parent().attr('id');
     const indexSpanParent = getIndexElem(spanParentId);
-    $(this).replaceWith(`<input id=temp-txt-editor  value="${this.innerText}" type=text> </input>`);
+    $(this).replaceWith(`<input id=temp-txt-editor class=inputFocus value="${this.innerText}" type=text> </input>`);
+    $('#temp-txt-editor').trigger('focus');
     $('#body-id').keydown((event) => {
       if (event.keyCode === 13) {
         const tabKiller = $('#temp-txt-editor').val();
@@ -167,22 +173,23 @@ jQuery(document).ready(() => {
       }
     });
   });
-
   $(document).on('click', '#delete-all-completeTask-button', () => {
     const activeTask = $(':checkbox:checked');
     if (activeTask.length > 0) {
-      $.each(activeTask, (index, value) => {
-        const tempObjectArrayHolder = $(value).parent();
-        const tempTaskStringIdHolder = tempObjectArrayHolder.attr('id');
-        const taskArrayDeleteCompleteTaskIndexHolder = getIndexElem(tempTaskStringIdHolder);
-        taskList.splice(taskArrayDeleteCompleteTaskIndexHolder, 1);
+      // eslint-disable-next-line func-names
+      $.each(taskList, function () {
+        if (this.status === true) {
+          const elm = this;
+          const tempTaskStringIdHolder = elm.id;
+          const taskArrayDeleteCompleteTaskIndexHolder = getIndexElem(tempTaskStringIdHolder);
+          taskList.splice(taskArrayDeleteCompleteTaskIndexHolder, 1);
+        }
       });
     } else {
       $('#to-do-list').append('<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>');
     }
     paginationRender();
   });
-
   // eslint-disable-next-line func-names
   $(document).on('click', '.task-check', function () {
     const tempElmCheckboxIdHolder = $(this).parent();

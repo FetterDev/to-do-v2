@@ -16,9 +16,9 @@ jQuery(document).ready(() => {
   function clearCheckAll() {
     $('#pick-all-button').prop('checked', false);
   }
-  function styleForActiveTab(elm) {
-    $('.activeTabStyle').removeClass('activeTabStyle');
-    elm.addClass('activeTabStyle');
+  function styleForActiveTab(element) {
+    $('.tab').removeClass('active-tab-style');
+    element.addClass('active-tab-style');
   }
 
   function renderPaginationButton(btnCount) {

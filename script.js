@@ -2,9 +2,9 @@ jQuery(document).ready(() => {
   let taskList = [];
   const doneTasks = [];
   let currentPage = 0;
-  const SHOW_ALL = 0;
-  const SHOW_ACTIVE = 1;
-  const SHOW_COMPLETED = 2;
+  const SHOW_ALL = "allTab";
+  const SHOW_ACTIVE = "activeTab";
+  const SHOW_COMPLETED = "completeTab";
 
   let filterTab = SHOW_ALL;
 
@@ -22,24 +22,25 @@ jQuery(document).ready(() => {
   }
 
   function renderPaginationButton(btnCount) {
+    let buttonHtml="";
     if (currentPage < 0) currentPage = 0;
     if (currentPage >= btnCount) {
       currentPage = btnCount - 1;
     }
-    $('#paginationList').children().remove();
     for (let page = 0; page < btnCount; page += 1) {
       const activeBtnStyle = (page === currentPage) ? 'activeButtonStyle' : '';
-      $('#paginationList').append(`
+      buttonHtml+=`
           <button class="paginationButton ${activeBtnStyle}" id=${page}>
             ${page + 1}
           </button>
-          <span></span>`);
+          <span></span>`;
     }
+    $('#paginationList').html(buttonHtml);
   }
 
   function activeTaskHolder() {
     $('#taskCounter >').remove();
-    const activeTasks = taskList.filter((e) => e.status === false);
+    const activeTasks = taskList.filter((element) => element.status === false);
     let taskCounterText = 'task';
     if (activeTasks.length === 0) {
       $('#pick-all-button').prop('checked', true);
@@ -187,7 +188,7 @@ jQuery(document).ready(() => {
       }
     });
     if (doneTasks.length > 0) {
-      taskList = taskList.filter((e) => e.status === false);
+      taskList = taskList.filter((element) => element.status === false);
       clearCheckAll();
     } else {
       $('#to-do-list').append('<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>');
@@ -213,7 +214,8 @@ jQuery(document).ready(() => {
   // eslint-disable-next-line func-names
   $('.tab').on('click', function (event) {
     styleForActiveTab($(this));
-    filterTab = parseInt(event.target.id, 10);
+    filterTab = this.id;
+    console.log(this.id)
     if (taskList.length === 0) {
       $('#to-do-list').append('<span class=all-task-done-alert> Hurry to add new tasks to your to-do list! </span>');
     }

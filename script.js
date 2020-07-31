@@ -41,7 +41,11 @@ jQuery(document).ready(() => {
     $('#taskCounter >').remove();
     const activeTasks = taskList.filter((e) => e.status === false);
     let taskCounterText = 'task';
+    if (activeTasks.length === 0) {
+      $('#pick-all-button').prop('checked', true);
+    }
     if (activeTasks.length > 0) {
+      $('#pick-all-button').prop('checked', false);
       $('.pick-all-button').attr('style', 'opacity: 1;');
       if (activeTasks > 1) taskCounterText = 'tasks';
       $('#taskCounter').append(`<span>Need do ${activeTasks.length} ${taskCounterText}</span>`);

@@ -10,11 +10,11 @@ h1{
 ol{
     padding: 0;
 }
-.headList{
+.head-list{
     display: flex;
     justify-content: space-between;
 }
-.countTaskHolder{
+.count-task-holder{
     padding-top: 2vh;
     font-size: 2vh;
     color:rgb(236, 128, 158) ;

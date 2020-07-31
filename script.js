@@ -76,7 +76,6 @@ jQuery(document).ready(() => {
           <input id=task-checkbox type=checkbox  ${checked} class=task-check >
             <span  class=task-txt white-space:pre-line word-break=break-all id=spanId>${task.text} </span>
           <input type=button class=task-delete-button value=Delete >
-          <br/>
         </li>`;
       });
     }

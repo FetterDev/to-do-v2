@@ -1,5 +1,5 @@
 jQuery(document).ready(() => {
-  const taskList = [];
+  let taskList = [];
   const doneTasks = [];
   let currentPage = 0;
   const SHOW_ALL = 0;
@@ -107,6 +107,7 @@ jQuery(document).ready(() => {
       taskList.push(taskObject);
       $('#new-task-text').val('');
       currentPage = Math.ceil(taskList.length / 5);
+      $('#0').trigger('click');
       paginationRender();
     } else {
       $('#new-task-text').val('');
@@ -174,34 +175,20 @@ jQuery(document).ready(() => {
       }
     });
   });
-  // eslint-disable-next-line func-names
-  function deleteDoneTask() {
-    // eslint-disable-next-line func-names
-    $.each(taskList, function () {
-      if (this.status === true) {
-        const elm = this;
-        const tempTaskStringIdHolder = elm.id;
-        const taskArrayDeleteCompleteTaskIndexHolder = getIndexElem(tempTaskStringIdHolder);
-        taskList.splice(taskArrayDeleteCompleteTaskIndexHolder);
-      }
-    });
-  }
+
   $(document).on('click', '#delete-all-completeTask-button', () => {
-    // console.log("11")
     // eslint-disable-next-line func-names
     $.each(taskList, function () {
-      //  console.log(this)
       if (this.status === true) {
         doneTasks.push(this);
       }
     });
     if (doneTasks.length > 0) {
-      deleteDoneTask();
+      taskList = taskList.filter((e) => e.status === false);
       clearCheckAll();
     } else {
       $('#to-do-list').append('<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>');
     }
-
     paginationRender();
   });
   // eslint-disable-next-line func-names

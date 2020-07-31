@@ -13,7 +13,9 @@ jQuery(document).ready(() => {
     const taskIndex = taskList.findIndex((item) => item.id === taskId);
     return taskIndex;
   }
-
+  function clearCheckAll() {
+    $('#pick-all-button').prop('checked', false);
+  }
   function styleForActiveTab(elm) {
     $('.activeTabStyle').removeClass('activeTabStyle');
     elm.addClass('activeTabStyle');
@@ -91,6 +93,7 @@ jQuery(document).ready(() => {
   }
 
   $(document).on('click', '#add-task-button', () => {
+    clearCheckAll();
     const tabKiller = $('#new-task-text').val();
     let taskText = tabKiller.trim();
     // eslint-disable-next-line no-undef
@@ -114,7 +117,6 @@ jQuery(document).ready(() => {
     currentPage = parseInt(this.id, 10);
     paginationRender();
   });
-
   $(document).on('click', '#pick-all-button', () => {
     if ($('#pick-all-button').is(':checked')) {
       // eslint-disable-next-line func-names
@@ -192,10 +194,10 @@ jQuery(document).ready(() => {
       if (this.status === true) {
         doneTasks.push(this);
       }
-    });   
+    });
     if (doneTasks.length > 0) {
-      deleteDoneTask()
-      $('#pick-all-button').prop('checked', false);
+      deleteDoneTask();
+      clearCheckAll();
     } else {
       $('#to-do-list').append('<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>');
     }
@@ -204,6 +206,7 @@ jQuery(document).ready(() => {
   });
   // eslint-disable-next-line func-names
   $(document).on('click', '.task-check', function () {
+    clearCheckAll();
     const tempElmCheckboxIdHolder = $(this).parent();
     const tempCheckboxParentStringIdHolder = tempElmCheckboxIdHolder.attr('id');
     const taskArrayIndex = getIndexElem(tempCheckboxParentStringIdHolder);

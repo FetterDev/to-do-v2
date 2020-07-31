@@ -1,5 +1,6 @@
 jQuery(document).ready(() => {
   const taskList = [];
+  const doneTasks = [];
   let currentPage = 0;
   const SHOW_ALL = 0;
   const SHOW_ACTIVE = 1;
@@ -56,8 +57,6 @@ jQuery(document).ready(() => {
   }
 
   function render(array) {
-    $('#to-do-list').children().remove();
-
     let tasksHTML = '';
     if (array.length > 0) {
       array.forEach((task) => {
@@ -75,7 +74,7 @@ jQuery(document).ready(() => {
         </li>`;
       });
     }
-    $('#to-do-list').append(tasksHTML);
+    $('#to-do-list').html(tasksHTML);
     taskDecorate();
     activeTaskHolder();
   }
@@ -104,6 +103,7 @@ jQuery(document).ready(() => {
       taskObject.status = false;
       taskList.push(taskObject);
       $('#new-task-text').val('');
+      currentPage = Math.ceil(taskList.length / 5);
       paginationRender();
     } else {
       $('#new-task-text').val('');
@@ -155,7 +155,6 @@ jQuery(document).ready(() => {
   $(document).on('blur', '.inputFocus', () => {
     paginationRender();
   });
-
   // eslint-disable-next-line func-names
   $(document).on('dblclick', '.task-txt', function () {
     const spanParentId = $(this).parent().attr('id');
@@ -173,21 +172,34 @@ jQuery(document).ready(() => {
       }
     });
   });
+  // eslint-disable-next-line func-names
+  function deleteDoneTask() {
+    // eslint-disable-next-line func-names
+    $.each(taskList, function () {
+      if (this.status === true) {
+        const elm = this;
+        const tempTaskStringIdHolder = elm.id;
+        const taskArrayDeleteCompleteTaskIndexHolder = getIndexElem(tempTaskStringIdHolder);
+        taskList.splice(taskArrayDeleteCompleteTaskIndexHolder);
+      }
+    });
+  }
   $(document).on('click', '#delete-all-completeTask-button', () => {
-    const activeTask = $(':checkbox:checked');
-    if (activeTask.length > 0) {
-      // eslint-disable-next-line func-names
-      $.each(taskList, function () {
-        if (this.status === true) {
-          const elm = this;
-          const tempTaskStringIdHolder = elm.id;
-          const taskArrayDeleteCompleteTaskIndexHolder = getIndexElem(tempTaskStringIdHolder);
-          taskList.splice(taskArrayDeleteCompleteTaskIndexHolder, 1);
-        }
-      });
+    // console.log("11")
+    // eslint-disable-next-line func-names
+    $.each(taskList, function () {
+      //  console.log(this)
+      if (this.status === true) {
+        doneTasks.push(this);
+      }
+    });   
+    if (doneTasks.length > 0) {
+      deleteDoneTask()
+      $('#pick-all-button').prop('checked', false);
     } else {
       $('#to-do-list').append('<span class=all-task-done-alert> To delete completed tasks, you must do them first! </span>');
     }
+
     paginationRender();
   });
   // eslint-disable-next-line func-names

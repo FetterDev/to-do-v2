@@ -2,34 +2,33 @@ jQuery(document).ready(() => {
   let taskList = [];
   const doneTasks = [];
   let currentPage = 0;
-  const SHOW_ALL = "allTab";
-  const SHOW_ACTIVE = "activeTab";
-  const SHOW_COMPLETED = "completeTab";
+  const SHOW_ALL = 'allTab';
+  const SHOW_ACTIVE = 'activeTab';
+  const SHOW_COMPLETED = 'completeTab';
 
   let filterTab = SHOW_ALL;
 
-  function getIndexElem(stringId) {
-    const taskId = parseInt(stringId, 10);
-    const taskIndex = taskList.findIndex((item) => item.id === taskId);
+  const getIndexElem = (stringId) => {
+    const taskIndex = taskList.findIndex((item) => item.id === Number(stringId));
     return taskIndex;
-  }
-  function clearCheckAll() {
+  };
+  const clearCheckAll = () => {
     $('#pick-all-button').prop('checked', false);
   }
-  function styleForActiveTab(element) {
+  const styleForActiveTab = (element) => {
     $('.tab').removeClass('active-tab-style');
     element.addClass('active-tab-style');
   }
 
-  function renderPaginationButton(btnCount) {
-    let buttonHtml="";
+  const renderPaginationButton = (btnCount) => {
+    let buttonHtml = '';
     if (currentPage < 0) currentPage = 0;
     if (currentPage >= btnCount) {
       currentPage = btnCount - 1;
     }
     for (let page = 0; page < btnCount; page += 1) {
       const activeBtnStyle = (page === currentPage) ? 'activeButtonStyle' : '';
-      buttonHtml+=`
+      buttonHtml += `
           <button class="paginationButton ${activeBtnStyle}" id=${page}>
             ${page + 1}
           </button>
@@ -38,7 +37,7 @@ jQuery(document).ready(() => {
     $('#paginationList').html(buttonHtml);
   }
 
-  function activeTaskHolder() {
+  const activeTaskHolder = () => {
     $('#taskCounter >').remove();
     const activeTasks = taskList.filter((element) => element.status === false);
     let taskCounterText = 'task';
@@ -53,7 +52,7 @@ jQuery(document).ready(() => {
     }
   }
 
-  function taskDecorate() {
+  const taskDecorate = () => {
     taskList.forEach((task) => {
       if (task.status) {
         $(`#${task.id} .task-txt`).addClass('done-task-decoration');
@@ -61,7 +60,7 @@ jQuery(document).ready(() => {
         $(`#${task.id}.task-txt`).removeClass('done-task-decoration');
       }
     });
-  }
+  };
 
   function render(array) {
     let tasksHTML = '';
@@ -215,7 +214,7 @@ jQuery(document).ready(() => {
   $('.tab').on('click', function (event) {
     styleForActiveTab($(this));
     filterTab = this.id;
-    console.log(this.id)
+    console.log(this.id);
     if (taskList.length === 0) {
       $('#to-do-list').append('<span class=all-task-done-alert> Hurry to add new tasks to your to-do list! </span>');
     }

@@ -6,49 +6,47 @@
     <title>TO DO by Fetter</title>
     <link rel="shortcut icon" href="/img/editDO.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="script.js"> </script>
-
-</head>
-<body id="body-id">
-    <div>
-        <div class=" wrapper paper">
-                <div >  
-                    <div class="head-list">
-                        <h1 class="title" id="activeTaskCounter"> Your to do list</h1>
-                        <div class="count-task-holder" > <span id="taskCounter" ></span></div>
-                     </div>
-                    
-                        <div class="add-task-panel">
-                            <input type="text" class="text-holder" placeholder="Add new task!" id="new-task-text">
-                            <input type="button" class="button" value="Add task" id="add-task-button">
+    </head>
+    <body id="body-id">
+        <div>
+            <div class=" wrapper paper">
+                    <div >  
+                        <div class="head-list">
+                            <h1 class="title" id="activeTaskCounter"> Your to do list</h1>
+                            <div class="count-task-holder" > <span id="taskCounter" ></span></div>
                         </div>
-                        <div class="pick-all-button">
-                            <div>
-                                <input type="checkbox"  id="pick-all-button"></input>   
-                                <span>Tap this for pick all tasks</span>
+                        
+                            <div class="add-task-panel">
+                                <input type="text" class="text-holder" placeholder="Add new task!" id="new-task-text">
+                                <input type="button" class="button" value="Add task" id="add-task-button">
                             </div>
-                            <div>
-                                <span>Tap this for delete  all  compete tasks </span>
-                                <a id="delete-all-completeTask-button" ><img src="img/trash.png" alt=""></a> 
-                            </div>
-                        </div>   
-                        <ol id="to-do-list">
-                        </ol>
-                            <div class="bottom-button ">
-                              
+                            <div class="pick-all-button">
+                                <div>
+                                    <input type="checkbox"  id="pick-all-button"></input>   
+                                    <span>Tap this for pick all tasks</span>
+                                </div>
+                                <div>
+                                    <span>Tap this for delete  all  compete tasks </span>
+                                    <a id="delete-all-completeTask-button" ><img src="img/trash.png" alt=""></a> 
+                                </div>
+                            </div>   
+                            <ol id="to-do-list">
+                            </ol>
+                                <div class="bottom-button ">
                                 
-                                <input type="button" class="button tab  active-tab-style" value="All tasks" id="allTab">
-                                <input type="button" class="button tab" value="Active tasks" id="activeTab">
-                                <input type="button" class="button tab  paginationMargin" value="Completed tasks" id="completeTab">
-                                <span class=pagination-span-style " > Lists of your tasks:  </span>  <span id="paginationList"></span>
-                            </div>
-                </div>
-           </div>
+                                    
+                                    <input type="button" class="button tab  active-tab-style" value="All tasks" id="allTab">
+                                    <input type="button" class="button tab" value="Active tasks" id="activeTab">
+                                    <input type="button" class="button tab  paginationMargin" value="Completed tasks" id="completeTab">
+                                    <span class=pagination-span-style " > Lists of your tasks:  </span>  <span id="paginationList"></span>
+                                </div>
+                    </div>
+            </div>
+            </div>
         </div>
-    </div>
-    
-</body>
-</html>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="script.js"> </script>
+    </body>
+    </html>

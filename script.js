@@ -14,11 +14,11 @@ jQuery(document).ready(() => {
   };
   const clearCheckAll = () => {
     $('#pick-all-button').prop('checked', false);
-  }
+  };
   const styleForActiveTab = (element) => {
     $('.tab').removeClass('active-tab-style');
     element.addClass('active-tab-style');
-  }
+  };
 
   const renderPaginationButton = (btnCount) => {
     let buttonHtml = '';
@@ -27,30 +27,24 @@ jQuery(document).ready(() => {
       currentPage = btnCount - 1;
     }
     for (let page = 0; page < btnCount; page += 1) {
-      const activeBtnStyle = (page === currentPage) ? 'activeButtonStyle' : '';
       buttonHtml += `
-          <button class="paginationButton ${activeBtnStyle}" id=${page}>
+        <button class="paginationButton ${(page === currentPage) ? 'activeButtonStyle' : ''}" id=${page}>
             ${page + 1}
           </button>
-          <span></span>`;
+          `;
     }
     $('#paginationList').html(buttonHtml);
-  }
+  };
 
   const activeTaskHolder = () => {
-    $('#taskCounter >').remove();
     const activeTasks = taskList.filter((element) => element.status === false);
-    let taskCounterText = 'task';
-    if (activeTasks.length === 0) {
-      $('#pick-all-button').prop('checked', true);
-    }
+    const checkboxStatus = activeTasks.length === 0;
+    $('#pick-all-button').prop('checked', checkboxStatus);
     if (activeTasks.length > 0) {
-      $('#pick-all-button').prop('checked', false);
       $('.pick-all-button').attr('style', 'opacity: 1;');
-      if (activeTasks > 1) taskCounterText = 'tasks';
-      $('#taskCounter').append(`<span>Need do ${activeTasks.length} ${taskCounterText}</span>`);
     }
-  }
+    $('#taskCounter').html(`<span>Need do ${activeTasks.length}  ${(activeTasks.length > 1) ? 'tasks' : 'task'} </span>`);
+  };
 
   const taskDecorate = () => {
     taskList.forEach((task) => {
@@ -62,7 +56,7 @@ jQuery(document).ready(() => {
     });
   };
 
-  function render(array) {
+  const render = (array) => {
     let tasksHTML = '';
     if (array.length > 0) {
       array.forEach((task) => {
@@ -82,9 +76,9 @@ jQuery(document).ready(() => {
     $('#to-do-list').html(tasksHTML);
     taskDecorate();
     activeTaskHolder();
-  }
+  };
 
-  function paginationRender() {
+  const paginationRender = () => {
     const filteredTasks = taskList.filter((task) => filterTab === SHOW_ALL
     || (filterTab === SHOW_ACTIVE && task.status === false)
     || (filterTab === SHOW_COMPLETED && task.status === true));
@@ -93,28 +87,27 @@ jQuery(document).ready(() => {
     const end = sliceStart + 5;
     const arrayForPaginationRender = filteredTasks.slice(sliceStart, end);
     render(arrayForPaginationRender);
-  }
+  };
 
   $(document).on('click', '#add-task-button', () => {
     clearCheckAll();
     const tabKiller = $('#new-task-text').val();
     let taskText = tabKiller.trim();
     // eslint-disable-next-line no-undef
-    taskText = _.escape([taskText]);
+    taskText = _.escape(taskText);
     if (taskText.length !== 0) {
-      const taskObject = {};
       const idTemp = Date.now();
-      taskObject.text = taskText;
-      taskObject.id = idTemp;
-      taskObject.status = false;
+      const taskObject = {
+        text: taskText,
+        id: idTemp,
+        status: false,
+      };
       taskList.push(taskObject);
-      $('#new-task-text').val('');
       currentPage = Math.ceil(taskList.length / 5);
-      $('#0').trigger('click');
+      $('#all-tasks').trigger('click');
       paginationRender();
-    } else {
-      $('#new-task-text').val('');
     }
+    $('#new-task-text').val('');
   });
   // eslint-disable-next-line func-names
   $(document).on('click', '.paginationButton', function () {
@@ -150,7 +143,7 @@ jQuery(document).ready(() => {
     const tabKiller = $('#new-task-text').val();
     let taskText = tabKiller.trim();
     // eslint-disable-next-line no-undef
-    taskText = _.escape([taskText]);
+    taskText = _.escape(taskText);
     if (taskText.length !== 0) {
       if (event.keyCode === 13) {
         $('#add-task-button').click();
@@ -172,7 +165,7 @@ jQuery(document).ready(() => {
         const tabKiller = $('#temp-txt-editor').val();
         let taskText = tabKiller.trim();
         // eslint-disable-next-line no-undef
-        taskText = _.escape([taskText]);
+        taskText = _.escape(taskText);
         taskList[indexSpanParent].text = taskText;
         paginationRender();
       }

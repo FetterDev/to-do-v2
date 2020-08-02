@@ -6,8 +6,8 @@ jQuery(document).ready(() => {
   const SHOW_ACTIVE = 'activeTab';
   const SHOW_COMPLETED = 'completeTab';
   const taskOnPage = 5;
+  const enterKey = 13;
   let filterTab = SHOW_ALL;
-
   const getIndexElem = (stringId) => {
     const taskIndex = taskList.findIndex((item) => item.id === Number(stringId));
     return taskIndex;
@@ -24,7 +24,6 @@ jQuery(document).ready(() => {
     if (currentPage < 0) currentPage = 0;
     if (currentPage >= btnCount) currentPage = btnCount - 1;
     for (let page = 0; page < btnCount; page += 1) {
-      
       buttonHtml += `
         <button class="paginationButton ${(page === currentPage) ? 'activeButtonStyle' : ''}" >
             ${page + 1}
@@ -33,7 +32,6 @@ jQuery(document).ready(() => {
     }
     $('#paginationList').html(buttonHtml);
   };
-
   const activeTaskHolder = () => {
     const activeTasks = taskList.filter((element) => element.status === false);
     const checkboxStatus = activeTasks.length === 0;
@@ -59,12 +57,11 @@ jQuery(document).ready(() => {
 
     activeTaskHolder();
   };
-
   const paginationRender = () => {
-    const filteredTasks = taskList.filter((task) =>(
-      filterTab === SHOW_ALL || 
-      filterTab === SHOW_ACTIVE && task.status === false ||
-      filterTab === SHOW_COMPLETED && task.status === true
+    const filteredTasks = taskList.filter((task) => (
+      filterTab === SHOW_ALL
+      || filterTab === SHOW_ACTIVE && task.status === false
+      || filterTab === SHOW_COMPLETED && task.status === true
     ));
     const pageNumber = Math.ceil(filteredTasks.length / taskOnPage);
     renderPaginationButton(pageNumber);
@@ -78,12 +75,10 @@ jQuery(document).ready(() => {
     filterTab = object.id;
     paginationRender();
   };
-
   $(document).on('click', '#add-task-button', () => {
     clearCheckAll();
     const tabKiller = $('#new-task-text').val();
     let taskText = tabKiller.trim();
-    // eslint-disable-next-line no-undef
     taskText = _.escape(taskText);
     if (taskText.length !== 0) {
       const idTemp = Date.now();
@@ -100,28 +95,21 @@ jQuery(document).ready(() => {
     }
     $('#new-task-text').val('');
   });
-  // eslint-disable-next-line func-names
   $(document).on('click', '.paginationButton', function () {
     currentPage = (this.innerText) - 1;
     paginationRender();
   });
   $(document).on('click', '#pick-all-button', () => {
-    if ($('#pick-all-button').is(':checked')) {
-      // eslint-disable-next-line func-names
-      $.each(taskList, function () {
+    $.each(taskList, function () {
+      if ($('#pick-all-button').is(':checked')) {
         this.status = true;
-      });
-    } else {
-      // eslint-disable-next-line func-names
-      $.each(taskList, function () {
+      } else {
         this.status = false;
-      });
-    }
+      }
+    });
 
     paginationRender();
   });
-
-  // eslint-disable-next-line func-names
   $(document).on('click', '.task-delete-button', function () {
     const elmTaskIdHolder = $(this).parent();
     const tempTaskStringIdHolder = elmTaskIdHolder.attr('id');
@@ -133,38 +121,31 @@ jQuery(document).ready(() => {
   $('#body-id').keydown((event) => {
     const tabKiller = $('#new-task-text').val();
     let taskText = tabKiller.trim();
-    // eslint-disable-next-line no-undef
     taskText = _.escape(taskText);
     if (taskText.length !== 0) {
-      if (event.keyCode === 13) {
+      if (event.which === enterKey) {
         $('#add-task-button').click();
       }
     }
   });
 
-  $(document).on('blur', '.inputFocus', () => {
-    paginationRender();
-  });
-  // eslint-disable-next-line func-names
+  $(document).on('blur', '.inputFocus', paginationRender);
   $(document).on('dblclick', '.task-txt', function () {
     const spanParentId = $(this).parent().attr('id');
     const indexSpanParent = getIndexElem(spanParentId);
     $(this).replaceWith(`<input id=temp-txt-editor class=inputFocus value="${this.innerText}" type=text> </input>`);
     $('#temp-txt-editor').trigger('focus');
     $('#body-id').keydown((event) => {
-      if (event.keyCode === 13) {
+      if (event.which === enterKey) {
         const tabKiller = $('#temp-txt-editor').val();
         let taskText = tabKiller.trim();
-        // eslint-disable-next-line no-undef
         taskText = _.escape(taskText);
         taskList[indexSpanParent].text = taskText;
         paginationRender();
       }
     });
   });
-
   $(document).on('click', '#delete-all-completeTask-button', () => {
-    // eslint-disable-next-line func-names
     $.each(taskList, function () {
       if (this.status === true) {
         doneTasks.push(this);
@@ -176,7 +157,6 @@ jQuery(document).ready(() => {
     }
     paginationRender();
   });
-  // eslint-disable-next-line func-names
   $(document).on('click', '.task-check', function () {
     clearCheckAll();
     const tempElmCheckboxIdHolder = $(this).parent();
@@ -191,8 +171,6 @@ jQuery(document).ready(() => {
     taskList[taskArrayIndex] = tempArrayElement;
     paginationRender();
   });
-
-  // eslint-disable-next-line func-names
   $('.tab').on('click', function () {
     const tab = this;
     tabSwitch(tab);

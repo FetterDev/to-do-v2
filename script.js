@@ -24,8 +24,9 @@ jQuery(document).ready(() => {
     if (currentPage < 0) currentPage = 0;
     if (currentPage >= btnCount) currentPage = btnCount - 1;
     for (let page = 0; page < btnCount; page += 1) {
+      
       buttonHtml += `
-        <button class="paginationButton ${(page === currentPage) ? 'activeButtonStyle' : ''}" id=${page}>
+        <button class="paginationButton ${(page === currentPage) ? 'activeButtonStyle' : ''}" >
             ${page + 1}
           </button>
           `;
@@ -101,7 +102,7 @@ jQuery(document).ready(() => {
   });
   // eslint-disable-next-line func-names
   $(document).on('click', '.paginationButton', function () {
-    currentPage = parseInt(this.id, 10);
+    currentPage = (this.innerText) - 1;
     paginationRender();
   });
   $(document).on('click', '#pick-all-button', () => {
